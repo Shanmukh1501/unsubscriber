@@ -71,20 +71,6 @@ env/
 .env/
 venv.bak/
 
-# IDE and editors
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.project
-.pydevproject
-.settings/
-*.sublime-project
-*.sublime-workspace
-.vs/
-*.code-workspace
-
 # OS files
 .DS_Store
 .DS_Store?
@@ -113,12 +99,6 @@ optimizer.pt
 scheduler.pt
 rng_state.pth
 
-# Temporary model directories
-production_model/
-fast_roberta_model/
-temp_model/
-model_outputs/
-results/
 
 # Large data files
 *.csv
