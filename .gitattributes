@@ -1,0 +1,28 @@
+# Git LFS tracking for large model files
+
+# Model files
+*.bin filter=lfs diff=lfs merge=lfs -text
+*.safetensors filter=lfs diff=lfs merge=lfs -text
+*.pt filter=lfs diff=lfs merge=lfs -text
+*.pth filter=lfs diff=lfs merge=lfs -text
+*.h5 filter=lfs diff=lfs merge=lfs -text
+*.ckpt filter=lfs diff=lfs merge=lfs -text
+*.onnx filter=lfs diff=lfs merge=lfs -text
+
+# Model directories
+final_optimized_model/** filter=lfs diff=lfs merge=lfs -text
+ml_suite/models/** filter=lfs diff=lfs merge=lfs -text
+
+# Tokenizer files
+spm.model filter=lfs diff=lfs merge=lfs -text
+*.model filter=lfs diff=lfs merge=lfs -text
+
+# Large JSON files (if any)
+tokenizer.json filter=lfs diff=lfs merge=lfs -text
+config.json filter=lfs diff=lfs merge=lfs -text
+
+# Other potentially large files
+*.pkl filter=lfs diff=lfs merge=lfs -text
+*.joblib filter=lfs diff=lfs merge=lfs -text
+*.npy filter=lfs diff=lfs merge=lfs -text
+*.npz filter=lfs diff=lfs merge=lfs -text

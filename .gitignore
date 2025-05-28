@@ -81,24 +81,22 @@ ehthumbs.db
 Thumbs.db
 desktop.ini
 
-# Model training artifacts
+# Model training artifacts (but NOT our production models!)
 logs/
 tensorboard/
 wandb/
 mlruns/
 checkpoints/
 checkpoint-*/
-*.ckpt
-*.pth
-*.pt
-*.h5
-*.pkl
-*.joblib
 training_args.bin
 optimizer.pt
 scheduler.pt
 rng_state.pth
 
+# Temporary training files
+*.ckpt
+*.pkl
+*.joblib
 
 # Large data files
 *.csv
@@ -188,8 +186,6 @@ $RECYCLE.BIN/
 *.7z
 
 # Misc
-.env.example
-.env.sample
 secrets/
 private/
 confidential/
@@ -197,18 +193,27 @@ confidential/
 config.local.py
 settings.local.py
 
+# Temporary deployment files
+download_models.py
+use_remote_model.py
+
+# ===================================
+# IMPORTANT: Git LFS Tracked Files
+# ===================================
+# We're using Git LFS for large model files
+# So we're NOT ignoring these:
+# - final_optimized_model/**
+# - ml_suite/models/**
+# - *.bin (model files)
+# - *.safetensors (model files)
+# - *.pt (model files)
+# - *.pth (model files)
+# - *.h5 (model files)
+# - spm.model (tokenizer file)
+
 # Keep these files (exceptions)
 !requirements.txt
 !.gitignore
 !README.md
-# Large model files
-*.safetensors
-*.bin
-*.pt
-*.pth
-*.h5
-*.ckpt
-
-# Specific paths
-ml_suite/models/fine_tuned_unsubscriber/model.safetensors
-final_optimized_model/model.safetensors
+!.gitattributes
+!.env.example
