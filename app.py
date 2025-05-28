@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import base64
 import re
@@ -83,6 +84,24 @@ if cache_dir and not os.path.exists(cache_dir):
         app.logger.info(f"Created cache directory: {cache_dir}")
     except OSError as e:
         app.logger.error(f"Error creating cache directory {cache_dir}: {e}")
+
+# Initialize AI components for production (Gunicorn)
+# This runs when the module is imported, not just when __main__ runs
+def init_ai_on_first_request():
+    """Initialize AI on first request to avoid startup issues."""
+    if not hasattr(app, '_ai_initialized'):
+        app._ai_initialized = True
+        with app.app_context():
+            initialize_ai_components_on_app_start(app)
+
+# Register the initialization to happen before first request
+@app.before_request
+def before_first_request():
+    if not hasattr(app, '_ai_init_started'):
+        app._ai_init_started = True
+        # Run initialization in a separate thread to not block first request
+        init_thread = threading.Thread(target=init_ai_on_first_request, daemon=True)
+        init_thread.start()
 
 # --- AI Model Globals ---
 # Flag indicating if the predictor needs to be reloaded after model training
@@ -1840,6 +1859,29 @@ def initialize_ai_components_on_app_start(app):
     This includes loading the base model for predictions.
     """
     app.logger.info("Initializing AI components on app start...")
+    
+    # Debug: Log environment info
+    app.logger.info(f"Current working directory: {os.getcwd()}")
+    app.logger.info(f"Python path: {sys.path[:3]}...")
+    
+    # Check for model directory
+    model_dir = "final_optimized_model"
+    full_model_path = os.path.abspath(model_dir)
+    
+    if os.path.exists(model_dir):
+        app.logger.info(f"✅ Model directory found at: {full_model_path}")
+        files = os.listdir(model_dir)
+        app.logger.info(f"   Model files: {files}")
+        
+        # Check file sizes
+        for f in ['model.safetensors', 'spm.model', 'tokenizer.json']:
+            fpath = os.path.join(model_dir, f)
+            if os.path.exists(fpath):
+                size = os.path.getsize(fpath)
+                app.logger.info(f"   {f}: {size/1024/1024:.1f} MB")
+    else:
+        app.logger.error(f"❌ Model directory not found at: {full_model_path}")
+        app.logger.info(f"Current directory contents: {os.listdir('.')}")
     
     try:
         # Initialize the base predictor
