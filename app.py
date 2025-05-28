@@ -91,6 +91,23 @@ def init_ai_on_first_request():
     """Initialize AI on first request to avoid startup issues."""
     if not hasattr(app, '_ai_initialized'):
         app._ai_initialized = True
+        
+        # Check if we're on a free tier with limited memory
+        if os.environ.get('RENDER') and os.environ.get('DISABLE_AI', 'false').lower() != 'true':
+            # Check available memory on Render
+            try:
+                import psutil
+                available_memory = psutil.virtual_memory().available / (1024 * 1024)  # MB
+                total_memory = psutil.virtual_memory().total / (1024 * 1024)  # MB
+                app.logger.info(f"Memory check - Total: {total_memory:.0f}MB, Available: {available_memory:.0f}MB")
+                
+                if total_memory < 1024:  # Less than 1GB total memory
+                    app.logger.warning("⚠️ Detected free tier (512MB). AI features disabled to prevent crashes.")
+                    app.logger.warning("💡 Upgrade to Starter plan ($7/month) or set DISABLE_AI=false to force enable.")
+                    return
+            except Exception as e:
+                app.logger.warning(f"Could not check memory: {e}")
+        
         with app.app_context():
             initialize_ai_components_on_app_start(app)
 
