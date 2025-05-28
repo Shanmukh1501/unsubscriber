@@ -1,0 +1,21 @@
+{
+  "model_name": "microsoft/deberta-v3-small",
+  "training_date": "2025-05-27T02:45:24.492640",
+  "training_hours": 7.459452472222223,
+  "samples": 20000,
+  "final_metrics": {
+    "eval_loss": 7.772326353006065e-05,
+    "eval_accuracy": 1.0,
+    "eval_precision_important": 1.0,
+    "eval_recall_important": 1.0,
+    "eval_f1_important": 1.0,
+    "eval_precision_unsub": 1.0,
+    "eval_recall_unsub": 1.0,
+    "eval_f1_unsub": 1.0,
+    "eval_false_positives": 0,
+    "eval_runtime": 433.8438,
+    "eval_samples_per_second": 6.915,
+    "eval_steps_per_second": 0.217,
+    "epoch": 3.01
+  }
+}

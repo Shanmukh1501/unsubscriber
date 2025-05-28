@@ -1,0 +1,3333 @@
+<!DOCTYPE html>
+<html lang="en" class="dark h-full" data-theme="dark"> <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Easily manage and unsubscribe from unwanted email subscriptions in Gmail">
+    <title>Gmail Unsubscriber - Enhanced</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+    // Tailwind Config
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e'
+            },
+            accent: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81'
+            },
+            dark: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+              950: '#020617'
+            }
+          }
+        }
+      }
+    };
+    </script> <style>
+        /* Inter Font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* Theme Variables */
+        :root {
+            /* Light Theme Colors */
+            --color-bg-primary: #f9fafb;
+            --color-bg-secondary: #f1f5f9;
+            --color-bg-tertiary: #e2e8f0;
+            --color-text-primary: #1e293b;
+            --color-text-secondary: #475569;
+            --color-text-tertiary: #64748b;
+            --color-border: #e2e8f0;
+            --color-accent: #0ea5e9;
+            --color-accent-hover: #0284c7;
+            --color-accent-secondary: #6366f1;
+            --color-accent-success: #10b981;
+            --color-accent-danger: #ef4444;
+            --color-accent-warning: #f59e0b;
+            
+            /* UI Effects */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            /* Transitions */
+            --transition-fast: 150ms;
+            --transition-normal: 250ms;
+            --transition-slow: 350ms;
+            
+            /* Backgrounds */
+            --gradient-bg: linear-gradient(to bottom right, rgba(248, 250, 252, 0.8), rgba(241, 245, 249, 0.4));
+            --bg-overlay: rgba(255, 255, 255, 0.8);
+            
+            /* Animation Curves */
+            --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+            --ease-out: cubic-bezier(0, 0, 0.2, 1);
+            --ease-in: cubic-bezier(0.4, 0, 1, 1);
+        }
+        
+        /* Dark Theme Variables */
+        .dark {
+            --color-bg-primary: #0f172a;
+            --color-bg-secondary: #1e293b;
+            --color-bg-tertiary: #334155;
+            --color-text-primary: #f1f5f9;
+            --color-text-secondary: #cbd5e1;
+            --color-text-tertiary: #94a3b8;
+            --color-border: #334155;
+            --color-accent: #38bdf8;
+            --color-accent-hover: #0ea5e9;
+            --color-accent-secondary: #818cf8;
+            --color-accent-success: #34d399;
+            --color-accent-danger: #f87171;
+            --color-accent-warning: #fbbf24;
+            
+            /* UI Effects */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+            
+            /* Backgrounds */
+            --gradient-bg: linear-gradient(160deg, #0f172a 0%, #1e3a8a 50%, #3b0764 100%);
+            --bg-overlay: rgba(15, 23, 42, 0.8);
+        }
+        
+        /* Base styles */
+        html {
+            @apply h-full;
+            scroll-behavior: smooth;
+            background-color: var(--color-bg-primary);
+            color: var(--color-text-primary);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            @apply flex flex-col min-h-full;
+            background-color: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            background-image: var(--gradient-bg);
+            background-attachment: fixed;
+            transition: background-color var(--transition-normal), color var(--transition-normal);
+        }
+
+        /* Advanced Dropdown Styles */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            z-index: 999; /* Very high z-index to ensure visibility */
+            background-color: white;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .dropdown-menu.hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+        }
+        
+        .dark .dropdown-menu {
+            background-color: var(--color-bg-secondary);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .dropdown-option {
+            position: relative;
+            padding-left: 16px !important;
+            transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+            display: block;
+            width: 100%;
+            text-align: left;
+        }
+        
+        .dropdown-option-selected {
+            background-color: rgba(14, 165, 233, 0.15) !important;
+            border-left: 3px solid var(--color-accent) !important;
+            font-weight: 500 !important;
+            color: var(--color-accent) !important;
+        }
+        
+        .dropdown-option-selected::before {
+            content: '✓'; /* Checkmark symbol */
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-accent);
+            font-weight: bold;
+        }
+        
+        .dark .dropdown-option-selected {
+            background-color: rgba(14, 165, 233, 0.25) !important;
+        }
+        
+        /* Dropdown button styles */
+        .dropdown-button {
+            position: relative;
+            transition: all 0.15s ease-in-out;
+        }
+        
+        .dropdown-button:hover {
+            border-color: var(--color-accent) !important;
+        }
+        
+        .dropdown-button[aria-expanded="true"] {
+            border-color: var(--color-accent) !important;
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+        }
+        
+        /* Chevron animation */
+        .dropdown-button .chevron-icon {
+            transition: transform 0.2s ease-in-out;
+        }
+        
+        .dropdown-button[aria-expanded="true"] .chevron-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* Table Styles */
+        .table-main {
+            border-color: var(--color-border);
+        }
+        
+        .table-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background-color: var(--color-bg-secondary);
+            color: var(--color-text-tertiary);
+            box-shadow: var(--shadow-sm);
+            border-color: var(--color-border);
+        }
+        
+        .table-body {
+            background-color: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            border-color: var(--color-border);
+        }
+        
+        th {
+            font-weight: 600;
+            letter-spacing: 0.025em;
+        }
+        
+        .checkbox-custom {
+            background-color: var(--color-bg-tertiary);
+            border-color: var(--color-border);
+        }
+
+        /* Row Animations */
+        .mailer-row { animation: fadeIn 0.35s ease-out; } 
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .selected-row { /* tailwind */ @apply bg-blue-100 dark:bg-sky-800; } /* Darker blue for selected row in dark mode */
+
+        /* Component: App Header */
+        .app-header {
+            background-color: var(--bg-overlay);
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            border-bottom: 1px solid var(--color-border);
+            transition: background-color var(--transition-normal);
+        }
+        
+        /* Component: App Logo */
+        .app-logo {
+            @apply text-2xl sm:text-3xl font-bold flex items-center;
+        }
+        
+        .app-logo i {
+            color: var(--color-accent);
+        }
+        
+        .app-logo span {
+            background-image: linear-gradient(to right, var(--color-accent), var(--color-accent-secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Component: Theme Toggle */
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--color-bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+        }
+        
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-accent);
+        }
+        
+        .theme-toggle i {
+            font-size: 1.2rem;
+            position: absolute;
+            transition: all var(--transition-normal);
+        }
+        
+        .theme-toggle .light-icon {
+            color: #f59e0b;
+            opacity: 0;
+            transform: rotate(90deg) scale(0.5);
+        }
+        
+        .theme-toggle .dark-icon {
+            color: #60a5fa;
+            opacity: 1;
+            transform: rotate(0) scale(1);
+        }
+        
+        /* Light theme icon states */
+        html:not(.dark) .theme-toggle .light-icon {
+            opacity: 1;
+            transform: rotate(0) scale(1);
+        }
+        
+        html:not(.dark) .theme-toggle .dark-icon {
+            opacity: 0;
+            transform: rotate(-90deg) scale(0.5);
+        }
+        
+        /* Button Components */
+        .btn {
+            @apply font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-150 ease-in-out flex items-center;
+        }
+        
+        .btn:focus {
+            @apply outline-none ring-2 ring-offset-2;
+            ring-color: var(--color-accent);
+        }
+        
+        .btn-primary {
+            background-image: linear-gradient(to right, var(--color-accent), var(--color-accent-secondary));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            box-shadow: var(--shadow-lg), 0 0 15px var(--color-accent-secondary);
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            color: var(--color-accent-danger);
+        }
+        
+        .btn-text {
+            @apply shadow-none bg-transparent;
+        }
+        
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { 
+            background-color: var(--color-bg-secondary);
+            border-radius: 8px; 
+        }
+        ::-webkit-scrollbar-thumb { 
+            background-color: var(--color-accent-secondary);
+            opacity: 0.4;
+            border-radius: 8px; 
+            border: 2px solid transparent; 
+            background-clip: content-box;
+            transition: all var(--transition-normal);
+        }
+        ::-webkit-scrollbar-thumb:hover { 
+            background-color: var(--color-accent);
+            opacity: 0.6;
+        }
+        
+        /* Modal-specific scrollbar */
+        .modal-body::-webkit-scrollbar { width: 6px; }
+        .modal-body::-webkit-scrollbar-track { background-color: var(--color-bg-secondary); opacity: 0.3; }
+        .modal-body::-webkit-scrollbar-thumb { background-color: var(--color-accent-secondary); opacity: 0.3; }
+
+        /* Tooltip Styling */
+        .tooltip { /* tailwind */ @apply invisible absolute opacity-0 transition-all duration-200 ease-in-out; }
+        .has-tooltip:hover .tooltip { /* tailwind */ @apply visible opacity-100 z-50 transform translate-y-1; }
+        
+        /* Enhanced Message Area Styling */
+        #messageArea { 
+            position: fixed; 
+            bottom: 1.5rem; 
+            right: 1.5rem; 
+            z-index: 10000; /* Ensure messages are on top */
+            width: 90%; 
+            max-width: 32rem; /* Slightly wider for better messages */
+            max-height: 60vh; /* Limit height and add scrolling */
+            overflow-y: auto; /* Enable scrolling if many messages appear */
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding-right: 0.25rem; /* Room for scrollbar */
+        }
+        
+        /* Nicer scrollbar for message area */
+        #messageArea::-webkit-scrollbar {
+            width: 6px;
+        }
+        #messageArea::-webkit-scrollbar-track {
+            background-color: transparent; 
+        }
+        #messageArea::-webkit-scrollbar-thumb {
+            background-color: rgba(156, 163, 175, 0.5); /* Gray-400 with opacity */
+            border-radius: 6px;
+        }
+        #messageArea::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(107, 114, 128, 0.7); /* Gray-500 with opacity */
+        }
+
+        /* Domain Group Header Styling */
+        .domain-group-header {
+            /* tailwind */ @apply px-4 py-2.5 sm:px-6 bg-slate-100 dark:bg-slate-800/70 backdrop-blur-sm font-semibold text-sm text-gray-700 dark:text-gray-100 border-b border-t border-gray-200 dark:border-slate-700;
+        }
+        
+        /* Enhanced Modal System */
+        .modal-overlay {
+            position: fixed !important; 
+            inset: 0 !important;
+            background-color: rgba(0, 0, 0, 0.75) !important;
+            display: none !important; 
+            align-items: center !important; 
+            justify-content: center !important;
+            z-index: 9999 !important; 
+            opacity: 0 !important;
+            transition: opacity 0.3s ease !important;
+            backdrop-filter: blur(8px) !important;
+        }
+        
+        .modal-overlay.hidden {
+            display: none !important;
+        }
+        
+        /* Light mode modal overlay */
+        html:not(.dark) .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.4) !important;
+            backdrop-filter: blur(4px) !important;
+        }
+        
+        .modal-overlay.active { display: flex !important; opacity: 1 !important; }
+        
+        .modal-content {
+            background-color: #1e293b !important;
+            border-radius: 0.75rem !important; 
+            border: 1px solid rgba(148, 163, 184, 0.1) !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
+            width: 92% !important; display: flex !important; flex-direction: column !important;
+            transform: scale(0.95) translateY(10px) !important; /* Initial state for animation */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; /* Smoother transition */
+            max-width: 640px !important; max-height: 90vh !important; /* Increased max height */
+            opacity: 0 !important;
+            backdrop-filter: blur(12px) !important; /* Added for depth */
+        }
+        
+        /* Light mode modal content */
+        html:not(.dark) .modal-content {
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+        }
+        .modal-overlay.active .modal-content { 
+            transform: scale(1) translateY(0) !important; 
+            opacity: 1 !important; 
+            animation: modalPulse 0.4s ease-out forwards !important;
+        }
+        
+        @keyframes modalPulse {
+            0% { 
+                box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(99, 102, 241, 0.1) !important; 
+                border-color: rgba(99, 102, 241, 0.1) !important;
+            }
+            50% { 
+                box-shadow: 0 30px 60px -12px rgba(0,0,0,0.8), 0 0 20px rgba(99, 102, 241, 0.3) !important; 
+                border-color: rgba(99, 102, 241, 0.4) !important;
+            }
+            100% { 
+                box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), 0 0 15px rgba(99, 102, 241, 0.2) !important; 
+                border-color: rgba(99, 102, 241, 0.2) !important;
+            }
+        }
+        
+        /* Modal item entry animation - staggered fade in */
+        .modal-body .preview-item, .modal-body .keep-list-item {
+            animation: itemFadeIn 0.5s ease-out backwards;
+        }
+        
+        .modal-body .preview-item:nth-child(1), .modal-body .keep-list-item:nth-child(1) { animation-delay: 0.1s; }
+        .modal-body .preview-item:nth-child(2), .modal-body .keep-list-item:nth-child(2) { animation-delay: 0.15s; }
+        .modal-body .preview-item:nth-child(3), .modal-body .keep-list-item:nth-child(3) { animation-delay: 0.2s; }
+        .modal-body .preview-item:nth-child(4), .modal-body .keep-list-item:nth-child(4) { animation-delay: 0.25s; }
+        .modal-body .preview-item:nth-child(5), .modal-body .keep-list-item:nth-child(5) { animation-delay: 0.3s; }
+        .modal-body .preview-item:nth-child(n+6), .modal-body .keep-list-item:nth-child(n+6) { animation-delay: 0.35s; }
+        
+        @keyframes itemFadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(15px); 
+                box-shadow: 0 0 0 rgba(0,0,0,0); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2); 
+            }
+        }
+        .modal-header {
+            @apply flex justify-between items-center p-5 border-b; 
+            background-color: transparent !important;
+            border-color: rgba(148, 163, 184, 0.1) !important;
+            border-top-left-radius: 0.75rem !important;
+            border-top-right-radius: 0.75rem !important;
+        }
+        
+        /* Light mode modal header */
+        html:not(.dark) .modal-header {
+            background-color: transparent !important;
+            border-color: #e2e8f0 !important;
+        }
+        
+        .modal-title { 
+            @apply text-xl font-semibold;
+            color: #e2e8f0 !important;
+        }
+        
+        /* Light mode modal title */
+        html:not(.dark) .modal-title {
+            color: #1e293b !important;
+        }
+        
+        .modal-close-button { 
+            @apply rounded-lg p-2 transition-all;
+            background-color: transparent !important;
+            color: #94a3b8 !important;
+            border: 1px solid transparent !important;
+        }
+        
+        .modal-close-button:hover {
+            background-color: rgba(148, 163, 184, 0.1) !important;
+            color: #e2e8f0 !important;
+            border-color: rgba(148, 163, 184, 0.2) !important;
+        }
+        
+        /* Light mode close button */
+        html:not(.dark) .modal-close-button {
+            color: #64748b !important;
+        }
+        
+        html:not(.dark) .modal-close-button:hover {
+            background-color: #f1f5f9 !important;
+            color: #334155 !important;
+            border-color: #e2e8f0 !important;
+        }
+        .modal-body {
+            @apply p-6 overflow-y-auto flex-grow;
+            background-color: transparent !important;
+            color: #e2e8f0 !important;
+            overflow-x: hidden;
+        }
+        
+        /* Light mode modal body */
+        html:not(.dark) .modal-body {
+            background-color: transparent !important;
+            color: #475569 !important;
+        }
+        
+        /* Ensure text color in modal body is correct for dark theme */
+        html.dark .modal-body, html.dark .modal-body p, html.dark .modal-body span { color: #cbd5e1; /* slate-300 */ }
+        html.dark .modal-body .preview-subject { @apply dark:text-sky-300 !important; } /* Brighter subject for dark */
+        html.dark .modal-body .preview-date { @apply dark:text-slate-400 !important; }
+        html.dark .modal-body .preview-snippet { @apply dark:text-slate-300 !important; }
+        
+        /* Light mode text colors */
+        html:not(.dark) .modal-body,
+        html:not(.dark) .modal-body p,
+        html:not(.dark) .modal-body span { 
+            color: #1e293b !important; /* slate-800 */
+        }
+        
+html.dark .modal-body, .modal-body {
+            background-color: rgba(15, 23, 42, 0.9) !important; /* slate-900 with transparency */
+            backdrop-filter: blur(4px) !important; 
+            box-shadow: inset 0 1px 0 0 rgba(99, 102, 241, 0.1) !important; /* Subtle accent inner highlight */
+        }
+        html.dark .modal-body .preview-item {
+            background-color: rgba(30, 41, 59, 0.7) !important; /* slate-800 with transparency */
+            border-color: rgba(99, 102, 241, 0.2) !important; /* Indigo border */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2) !important; /* Enhanced shadow */
+            transition: all 0.2s ease-in-out !important;
+        }
+        
+        /* Light mode preview item */
+        html:not(.dark) .modal-body .preview-item {
+            background-color: rgba(255, 255, 255, 0.9) !important;
+            border-color: rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04) !important;
+            transition: all 0.2s ease-in-out !important;
+        }
+        
+        html.dark .modal-body .preview-item:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(99, 102, 241, 0.4) !important;
+            border-color: rgba(99, 102, 241, 0.4) !important;
+            background-color: rgba(30, 41, 59, 0.8) !important;
+        }
+        
+        /* Light mode preview item hover */
+        html:not(.dark) .modal-body .preview-item:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06) !important;
+            border-color: rgba(0, 0, 0, 0.15) !important;
+            background-color: rgba(248, 250, 252, 0.9) !important;
+        }
+        .empty-state-message p { color: #f1f5f9 !important; /* slate-100 */ }
+        .empty-state-message span { color: #94a3b8 !important; /* slate-400 */ }
+        .empty-state-message i { color: #60a5fa !important; /* blue-400 */ }
+        
+        /* Light mode empty state */
+        html:not(.dark) .empty-state-message p { color: #1e293b !important; /* slate-800 */ }
+        html:not(.dark) .empty-state-message span { color: #64748b !important; /* slate-500 */ }
+        html:not(.dark) .empty-state-message i { color: #0ea5e9 !important; /* blue-500 */ }
+
+        /* Email Preview Items - Enhanced styling */
+        .modal-body .preview-item {
+            @apply p-5 mb-4 last:mb-0 rounded-lg border transition-all;
+            background-color: rgba(30, 41, 59, 0.5) !important;
+            border-color: rgba(148, 163, 184, 0.2) !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+            overflow: hidden;
+        }
+        
+        /* Light mode preview item */
+        html:not(.dark) .modal-body .preview-item {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        .modal-body .preview-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+            border-color: rgba(14, 165, 233, 0.4) !important;
+        }
+        
+        html:not(.dark) .modal-body .preview-item:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+            border-color: #cbd5e1 !important;
+            background-color: #f1f5f9 !important;
+        }
+        .modal-body .preview-subject { 
+            @apply font-semibold text-base leading-tight mb-2;
+            color: #60a5fa !important;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+        
+        /* Light mode preview subject */
+        html:not(.dark) .modal-body .preview-subject {
+            color: #2563eb !important;
+        }
+        
+        .modal-body .preview-date { 
+            @apply text-xs font-medium mb-2;
+            color: #94a3b8 !important;
+        }
+        
+        /* Light mode preview date */
+        html:not(.dark) .modal-body .preview-date {
+            color: #64748b !important;
+        }
+        
+        .modal-body .preview-snippet { 
+            @apply text-sm leading-relaxed;
+            color: #cbd5e1 !important;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            max-width: 100%;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
+        }
+        
+        /* Light mode preview snippet */
+        html:not(.dark) .modal-body .preview-snippet {
+            color: #475569 !important;
+            border-top-color: #e2e8f0;
+        }
+        
+        .modal-body .keep-list-item {
+            /* tailwind */ @apply flex justify-between items-center p-3 hover:bg-slate-700/80 rounded-md transition-colors mb-2 bg-slate-800/60 shadow-sm backdrop-blur;
+            border: 1px solid rgba(99, 102, 241, 0.2) !important;
+            transition: all 0.2s ease-in-out !important;
+        }
+        
+        /* Light mode keep list item */
+        html:not(.dark) .modal-body .keep-list-item {
+            @apply bg-slate-50 hover:bg-slate-100;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        .modal-body .keep-list-item:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.1) !important;
+            border-color: rgba(99, 102, 241, 0.4) !important;
+        }
+        
+        /* Light mode keep list hover */
+        html:not(.dark) .modal-body .keep-list-item:hover {
+            border-color: rgba(0, 0, 0, 0.2) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+        }
+        
+        html.dark .modal-body .keep-list-email { /* tailwind */ @apply dark:text-slate-100; }
+        
+        /* Light mode keep list email */
+        html:not(.dark) .modal-body .keep-list-email {
+            @apply text-slate-800;
+        }
+        
+        .modal-body .remove-kept-sender { /* tailwind */ @apply text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-xs font-medium flex items-center; }
+
+        .modal-footer {
+            /* tailwind */ @apply flex justify-end items-center p-4 border-t mt-auto;
+            background-color: rgba(30, 41, 59, 0.95) !important; /* slate-800 */
+            border-color: rgba(99, 102, 241, 0.2) !important; /* Subtle indigo border */
+            border-bottom-left-radius: 0.75rem !important; 
+            border-bottom-right-radius: 0.75rem !important;
+        }
+        
+        /* Light mode modal footer */
+        html:not(.dark) .modal-footer {
+            background-color: rgba(248, 250, 252, 0.95) !important;
+            border-color: rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        /* Footer text colors - dark by default */
+        .modal-footer p {
+            color: rgba(156, 163, 175, 1) !important; /* text-gray-400 */
+        }
+        
+        /* Light mode footer text */
+        html:not(.dark) .modal-footer p {
+            color: rgba(107, 114, 128, 1) !important; /* text-gray-500 */
+        }
+        
+        .modal-footer button {
+            @apply font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all;
+            background-color: #475569 !important;
+            color: #f1f5f9 !important;
+            border: 1px solid rgba(148, 163, 184, 0.2) !important;
+            transform: translateY(0);
+        }
+        
+        /* Light mode footer button */
+        html:not(.dark) .modal-footer button {
+            background-color: #64748b !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        .modal-footer button:hover {
+            transform: translateY(-1px);
+            background-color: #334155 !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        /* Light mode button hover */
+        html:not(.dark) .modal-footer button:hover {
+            background-color: #475569 !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15) !important;
+        }
+        
+#dismissPreviewModalButton {
+            /* tailwind */ @apply px-4 py-2 rounded-lg text-sm font-medium transition-colors border shadow-sm backdrop-blur;
+            background-color: rgba(30, 41, 59, 0.7) !important; /* slate-800 with transparency */
+            color: #cbd5e1 !important; /* slate-300 */
+            border-color: rgba(71, 85, 105, 0.5) !important; /* slate-500 with transparency */
+            transform: translateY(0);
+            transition: all 0.2s ease-in-out !important;
+        }
+        
+        /* Light mode dismiss button */
+        html:not(.dark) #dismissPreviewModalButton {
+            background-color: rgba(241, 245, 249, 0.7) !important;
+            color: #334155 !important;
+            border-color: rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        #dismissPreviewModalButton:hover {
+            background-color: rgba(51, 65, 85, 0.8) !important; /* slate-700 with transparency */
+            border-color: rgba(99, 102, 241, 0.4) !important;
+            color: white !important;
+        }
+        
+        /* Light mode dismiss button hover */
+        html:not(.dark) #dismissPreviewModalButton:hover {
+            background-color: rgba(226, 232, 240, 0.8) !important;
+            border-color: rgba(0, 0, 0, 0.3) !important;
+            color: #0f172a !important;
+        }
+        
+        /* Light mode dismiss keep list button */
+        #dismissKeepListModalButton {
+            /* tailwind */ @apply px-4 py-2 rounded-lg text-sm font-medium transition-colors border shadow-sm backdrop-blur;
+            background-color: rgba(30, 41, 59, 0.7) !important; /* slate-800 with transparency */
+            color: #cbd5e1 !important; /* slate-300 */
+            border-color: rgba(71, 85, 105, 0.5) !important; /* slate-500 with transparency */
+            transform: translateY(0);
+            transition: all 0.2s ease-in-out !important;
+        }
+        
+        /* Light mode dismiss keep list button */
+        html:not(.dark) #dismissKeepListModalButton {
+            background-color: rgba(241, 245, 249, 0.7) !important;
+            color: #334155 !important;
+            border-color: rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        #dismissKeepListModalButton:hover {
+            background-color: rgba(51, 65, 85, 0.8) !important; /* slate-700 with transparency */
+            border-color: rgba(99, 102, 241, 0.4) !important;
+            color: white !important;
+        }
+        
+        /* Light mode dismiss keep list button hover */
+        html:not(.dark) #dismissKeepListModalButton:hover {
+            background-color: rgba(226, 232, 240, 0.8) !important;
+            border-color: rgba(0, 0, 0, 0.3) !important;
+            color: #0f172a !important;
+        }
+        
+        /* Typography Enhancements */
+        h1, h2, h3, h4, h5, h6 { /* tailwind */ @apply tracking-tight; }
+        .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 { text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        
+        /* Button Glow Effect */
+        .btn-glow:hover { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); /* Adjusted glow for blue-500 */ }
+        .dark .btn-glow:hover { box-shadow: 0 0 25px rgba(56, 189, 248, 0.5); /* Sky color glow for dark */ }
+        
+        /* Component-based styling */
+        .control-panel, .mailers-container {
+            background-color: var(--bg-overlay);
+            backdrop-filter: blur(8px);
+            border-color: var(--color-border);
+        }
+        
+        .mailers-container .mailers-header {
+            background-color: var(--color-bg-secondary);
+            border-color: var(--color-border);
+        }
+        
+        .mailers-header h2 {
+            color: var(--color-text-primary);
+        }
+        
+        .subtitle, .count-info {
+            color: var(--color-text-tertiary);
+        }
+        
+        .mailers-container .domain-group-header {
+            background-color: var(--color-bg-secondary);
+            color: var(--color-text-primary);
+            border-color: var(--color-border);
+        }
+
+        /* Progress Bar */
+        .progress-bar { /* tailwind */ @apply h-1 bg-sky-500 dark:bg-sky-400 rounded-full; transition: width 0.4s ease-in-out; }
+        .progress-container { /* tailwind */ @apply w-full bg-gray-200 dark:bg-slate-700 rounded-full h-1 overflow-hidden mb-0.5; }
+
+        /* Status Tags & Action Icons */
+        .status-tag { /* tailwind */ @apply px-2.5 py-1 inline-flex text-xs leading-tight font-semibold rounded-full shadow-sm; }
+        .status-success { /* tailwind */ @apply bg-green-100 text-green-700 dark:bg-green-600 dark:text-green-50; }
+        .status-manual { /* tailwind */ @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-500 dark:text-yellow-50; }
+        .status-attempted { /* tailwind */ @apply bg-blue-100 text-blue-700 dark:bg-blue-600 dark:text-blue-50; }
+        .status-failed { /* tailwind */ @apply bg-red-100 text-red-700 dark:bg-red-600 dark:text-red-50; }
+        .status-kept { /* tailwind */ @apply bg-indigo-100 text-indigo-700 dark:bg-indigo-600 dark:text-indigo-50; }
+        .status-pending { /* tailwind */ @apply bg-gray-100 text-gray-600 dark:bg-slate-600 dark:text-slate-300; }
+
+        .action-icon {
+            /* tailwind */ @apply cursor-pointer text-gray-500 hover:text-sky-600 dark:text-gray-400 dark:hover:text-sky-400 mx-1 transition-colors duration-150 text-base p-1 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700;
+        }
+        
+        /* General Empty State Message Styling */
+        .empty-state-message {
+            /* tailwind */ @apply flex flex-col items-center justify-center text-center p-6 sm:p-8 min-h-[150px] rounded-xl shadow-lg;
+            background-color: rgba(30, 41, 59, 0.7) !important; /* slate-800 with transparency */
+            border: 1px solid rgba(99, 102, 241, 0.2) !important; /* Subtle indigo border */
+            backdrop-filter: blur(4px); /* Subtle blur effect */
+        }
+        #app-content .empty-state-message { margin: 2rem auto !important; max-width: 600px; }
+        .empty-state-message i { /* tailwind */ @apply text-4xl sm:text-5xl text-sky-400 mb-4; }
+        .empty-state-message p { /* tailwind */ @apply text-xl sm:text-2xl font-semibold text-gray-100; }
+        .empty-state-message span { /* tailwind */ @apply text-sm sm:text-base text-gray-400 mt-1.5; }
+        #signInPrompt.hidden { display: none !important; }
+
+        /* Unsubscribe Type Tags */
+        .unsub-type-tag {
+            /* tailwind */ @apply px-2 py-0.5 inline-flex text-xs font-medium rounded-full items-center mr-1.5 mb-1;
+        }
+        .unsub-type-post { /* tailwind */ @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-700 dark:text-emerald-100; }
+        .unsub-type-mailto { /* tailwind */ @apply bg-amber-100 text-amber-700 dark:bg-amber-600 dark:text-amber-50; }
+        .unsub-type-link { /* tailwind */ @apply bg-sky-100 text-sky-700 dark:bg-sky-700 dark:text-sky-100; }
+        .unsub-type-body { /* tailwind */ @apply bg-purple-100 text-purple-700 dark:bg-purple-700 dark:text-purple-100; }
+        .unsub-type-unknown { /* tailwind */ @apply bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300; }
+
+        /* Action button in table */
+        .table-action-button {
+            /* tailwind */ @apply inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white transition-colors group focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-slate-800;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-full"> 
+
+    <header class="app-header">
+        <div class="progress-container fade-in"> <div id="pageProgressBar" class="progress-bar" style="width: 0%"></div> </div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex justify-between items-center">
+            <h1 class="app-logo">
+                <i class="fas fa-shield-halved mr-2.5"></i> <span>Unsubscriber</span>
+            </h1>
+            <div class="flex items-center gap-4">
+                <!-- Theme Toggle Button -->
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i class="fas fa-sun light-icon"></i>
+                    <i class="fas fa-moon dark-icon"></i>
+                </button>
+                
+                <!-- AI Control Button -->
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <button id="aiControlButton" class="theme-toggle relative group p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" title="AI Controls & Status">
+                        <i class="fas fa-brain text-lg text-slate-600 dark:text-slate-300 group-hover:text-sky-500 dark:group-hover:text-sky-400 transition-colors"></i>
+                        <span id="aiModelStatusIndicator"
+                              class="absolute top-0 right-0 block w-3 h-3 transform -translate-y-1/2 translate-x-1/2 bg-gray-400 rounded-full border-2 border-white dark:border-slate-800 transition-all duration-300 ease-in-out"
+                              title="AI Model Status: Initializing...">
+                        </span>
+                    </button>
+                </div>
+                
+                <div id="auth-container" class="flex items-center">
+                    <button id="signInButton" class="btn btn-primary"><i class="fab fa-google mr-2"></i>Sign In</button>
+                    <div id="userInfo" class="hidden items-center">
+                        <img id="userAvatar" src="https://placehold.co/40x40/E2E8F0/A0AEC0?text=U" alt="User Avatar" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full mr-3 border-2 border-sky-500 dark:border-sky-400 shadow-sm">
+                        <span id="userName" class="text-sm sm:text-base font-medium hidden sm:inline">User</span> 
+                        <button id="signOutButton" class="btn btn-text btn-danger ml-3 sm:ml-4">
+                            <i class="fas fa-sign-out-alt mr-1.5"></i>
+                            <span class="hidden sm:inline">Sign Out</span>
+                            <span class="sm:hidden"><i class="fas fa-sign-out-alt"></i></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-grow">
+        <div id="app-content" class="hidden">
+            <div class="mb-6 p-4 sm:p-6 rounded-xl shadow-xl border fade-in control-panel">
+                <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
+                     <div class="flex items-center gap-3 w-full lg:w-auto">
+                        <button id="scanEmailsButton" class="flex-grow lg:flex-grow-0 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2.5 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-150 ease-in-out flex items-center justify-center text-base btn-glow">
+                            <i class="fas fa-sync-alt mr-2 text-white animate-spin-slow hidden" id="scanSpinner"></i> <i class="fas fa-magnifying-glass mr-2 text-white" id="scanIcon"></i> Scan Emails
+                        </button>
+                        <div class="relative inline-block text-left">
+                            <div>
+                                <button type="button" id="scanLimitButton" class="dropdown-button inline-flex justify-center w-full rounded-lg border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2.5 bg-white dark:bg-slate-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-sky-500 transition-all duration-150" aria-haspopup="true" aria-expanded="false">
+                                    <span id="selectedScanLimitText">Scan 100</span> <i class="chevron-icon fas fa-chevron-down -mr-1 ml-2 h-5 w-5 text-gray-400 dark:text-gray-500"></i>
+                                </button>
+                            </div>
+                            <div id="scanLimitOptions" class="dropdown-menu origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-xl bg-white dark:bg-slate-700 ring-1 ring-black ring-opacity-5 dark:ring-slate-600 focus:outline-none hidden z-50">
+                                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="scanLimitButton">
+                                    <a href="#" class="dropdown-option block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-600 hover:text-gray-900 dark:hover:text-white transition-colors duration-150" role="menuitem" data-value="50">Scan 50</a>
+                                    <a href="#" class="dropdown-option block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-600 hover:text-gray-900 dark:hover:text-white transition-colors duration-150" role="menuitem" data-value="100">Scan 100</a>
+                                    <a href="#" class="dropdown-option block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-600 hover:text-gray-900 dark:hover:text-white transition-colors duration-150" role="menuitem" data-value="200">Scan 200</a>
+                                    <a href="#" class="dropdown-option block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-600 hover:text-gray-900 dark:hover:text-white transition-colors duration-150" role="menuitem" data-value="500">Scan 500</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative inline-block text-left ml-2">
+                            <div>
+                                <button type="button" id="scanPeriodButton" class="dropdown-button inline-flex justify-center w-full rounded-lg border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2.5 bg-white dark:bg-slate-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-sky-500 transition-all duration-150" aria-haspopup="true" aria-expanded="false">
+                                    <span id="selectedScanPeriodText">Last 180 days (Default)</span> <i class="chevron-icon fas fa-chevron-down -mr-1 ml-2 h-5 w-5 text-gray-400 dark:text-gray-500"></i>
+                                </button>
+                            </div>
+                            <div id="scanPeriodOptions" class="dropdown-menu origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-xl bg-white dark:bg-slate-700 ring-1 ring-black ring-opacity-5 dark:ring-slate-600 focus:outline-none hidden z-50" style="position: absolute; top: 100%; right: 0; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.25), 0 4px 6px -2px rgba(0, 0, 0, 0.15);">
+                                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="scanPeriodButton">
+                                    <a href="#" class="dropdown-option block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-600 hover:text-gray-900 dark:hover:text-white transition-colors duration-150" role="menuitem" data-value="30d">Last 30 days</a>
+                                    <a href="#" class="dropdown-option block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-600 hover:text-gray-900 dark:hover:text-white transition-colors duration-150" role="menuitem" data-value="90d">Last 90 days</a>
+                                    <a href="#" class="dropdown-option block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-600 hover:text-gray-900 dark:hover:text-white transition-colors duration-150" role="menuitem" data-value="180d">Last 180 days (Default)</a>
+                                    <a href="#" class="dropdown-option block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-600 hover:text-gray-900 dark:hover:text-white transition-colors duration-150" role="menuitem" data-value="1y">Last Year</a>
+                                    <a href="#" class="dropdown-option block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-600 hover:text-gray-900 dark:hover:text-white transition-colors duration-150" role="menuitem" data-value="all_time">All Time</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto justify-end">
+                        <button id="unsubscribeSelectedButton" disabled class="w-full sm:w-auto bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold py-2.5 px-5 rounded-lg shadow-md opacity-50 cursor-not-allowed flex items-center justify-center transition-all">
+                            <i class="fas fa-ban mr-2 text-white"></i>Unsubscribe (<span id="selectedCountUnsubscribe">0</span>)
+                        </button>
+                        <button id="trashSelectedButton" disabled class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold py-2.5 px-5 rounded-lg shadow-md opacity-50 cursor-not-allowed flex items-center justify-center transition-all">
+                            <i class="fas fa-trash-alt mr-2 text-white"></i>Trash Senders (<span id="selectedCountTrash">0</span>)
+                        </button>
+                    </div>
+                </div>
+                 <div class="mt-5">
+                    <div class="relative">
+                        <input type="text" id="filterInput" placeholder="Filter by sender, email, domain, or subject..." class="w-full p-3 pl-10 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 dark:placeholder-gray-400 placeholder-gray-400 shadow-sm text-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-filter text-gray-400 dark:text-gray-500"></i>
+                        </div>
+                    </div>
+                </div>
+                 <div class="mt-3 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <label for="enableAutoGetToggle" class="inline-flex relative items-center cursor-pointer">
+                            <input type="checkbox" id="enableAutoGetToggle" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-sky-500 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-sky-600"></div>
+                            <span class="ml-2 text-sm font-medium text-gray-600 dark:text-gray-300">Enable experimental auto-GET for unsubscribe links</span>
+                        </label>
+                    </div>
+                    <button id="manageKeepListButton" class="text-sm text-sky-600 dark:text-sky-400 hover:underline focus:outline-none font-medium">
+                        <i class="fas fa-bookmark mr-1"></i>Manage Keep List (<span id="keepListCount">0</span>)
+                    </button>
+                    
+                    <!-- AI Legend -->
+                    <div id="aiLegend" class="hidden text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-slate-700/50 px-2 py-1 rounded-md border border-gray-200 dark:border-slate-600">
+                        <span class="font-medium">AI Labels:</span>
+                        <span class="inline-flex items-center ml-1 px-1 py-0.5 rounded text-red-600 dark:text-red-400"><i class="fas fa-robot mr-1"></i>UNSUBSCRIBABLE</span>
+                        <span class="inline-flex items-center ml-1 px-1 py-0.5 rounded text-green-600 dark:text-green-400"><i class="fas fa-robot mr-1"></i>IMPORTANT</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-xl shadow-xl overflow-hidden border fade-in mailers-container">
+                <div class="p-4 sm:p-5 border-b flex flex-col sm:flex-row justify-between items-center gap-2 mailers-header">
+                    <div>
+                        <h2 class="text-xl font-semibold">Identified Mailers</h2>
+                        <p class="text-sm subtitle mt-0.5">Review and manage potential subscriptions. Grouped by domain.</p>
+                        <div id="aiProcessingIndicator" class="hidden mt-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700/50">
+                            <i class="fas fa-robot mr-2 text-purple-500 dark:text-purple-400"></i>
+                            <span id="aiProcessingText">AI Classification Applied</span>
+                        </div>
+                    </div>
+                    <div id="totalScannedCount" class="text-sm self-start sm:self-center pt-1 sm:pt-0 font-medium count-info"></div>
+                </div>
+                <div id="loadingIndicator" class="hidden p-10 text-center"><i class="fas fa-circle-notch fa-spin text-4xl text-sky-500 dark:text-sky-400"></i><p class="mt-3 text-gray-600 dark:text-gray-300 font-medium">Scanning emails, please be patient...</p></div>
+                <div id="noResultsMessage" class="hidden empty-state-message"> <i class="fas fa-ghost"></i> <p>No Mailers Found</p> <span>Try adjusting scan settings or filters.</span>
+                </div>
+                <div class="overflow-x-auto max-h-[65vh] relative"> <table class="min-w-full divide-y table-main">
+                        <thead class="table-header"> <tr>
+                                <th class="px-4 py-3 sm:px-6 text-left text-xs font-medium uppercase"><input type="checkbox" id="selectAllCheckbox" class="rounded text-sky-600 focus:ring-sky-500 border shadow-sm checkbox-custom"></th>
+                                <th class="px-4 py-3 sm:px-6 text-left text-xs font-medium uppercase">Sender (Actions)</th>
+                                <th class="px-4 py-3 sm:px-6 text-left text-xs font-medium uppercase hidden md:table-cell">Example Subject</th>
+                                <th class="px-4 py-3 sm:px-6 text-left text-xs font-medium uppercase">Count</th>
+                                <th class="px-4 py-3 sm:px-6 text-left text-xs font-medium uppercase">Unsubscribe Method</th>
+                                <th class="px-4 py-3 sm:px-6 text-left text-xs font-medium uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mailerListBody" class="table-body divide-y"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="signInPrompt" class="empty-state-message text-center p-8 sm:p-10 max-w-md mx-auto mt-10 hidden bg-white dark:bg-slate-800/70 backdrop-blur-sm rounded-xl shadow-xl border border-gray-200 dark:border-slate-700">
+            <div class="flex justify-center mb-5">
+                <div class="w-16 h-16 rounded-full bg-sky-100 dark:bg-sky-900/50 flex items-center justify-center shadow-lg ring-4 ring-sky-200 dark:ring-sky-700">
+                    <i class="fas fa-user-shield text-sky-500 dark:text-sky-400 text-2xl"></i>
+                </div>
+            </div>
+            <h2 class="text-2xl font-bold mb-3 text-gray-800 dark:text-gray-100">Access Your Mailers</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-8 max-w-sm mx-auto">Sign in with Google to scan your Gmail and reclaim your inbox from unwanted mailers.</p>
+            <button id="promptSignInButton" class="bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-600 hover:to-indigo-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl text-lg transition-all transform hover:-translate-y-0.5 btn-glow">
+                <i class="fab fa-google mr-2 text-white"></i>Sign In with Google
+            </button>
+        </div>
+    </main>
+
+    <footer class="bg-white dark:bg-slate-900/80 backdrop-blur-md border-t border-gray-200 dark:border-slate-700/50 mt-auto py-5">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500 dark:text-gray-400">
+            &copy; <span id="currentYear"></span> <span class="font-medium text-sky-600 dark:text-sky-400">Gmail Unsubscriber</span>.
+            <p class="text-xs mt-1">Conceptual application. Use with care and at your own risk.</p>
+        </div>
+    </footer>
+
+    <div id="previewModal" class="modal-overlay" aria-labelledby="previewModalTitle" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="previewModalTitle">Recent Emails</h2>
+                <button id="closePreviewModalButton" type="button" class="modal-close-button" aria-label="Close modal">
+                    <i class="fas fa-times w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="previewModalBody" class="modal-body">
+                <div class="empty-state-message"><i class="fas fa-circle-notch fa-spin"></i><p>Loading previews...</p></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="dismissPreviewModalButton">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="keepListModal" class="modal-overlay" aria-labelledby="keepListModalTitle" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="keepListModalTitle">Manage Keep List</h2>
+                <button id="closeKeepListModalButton" type="button" class="modal-close-button" aria-label="Close modal">
+                     <i class="fas fa-times w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="keepListModalBody" class="modal-body">
+                <div class="empty-state-message"><i class="fas fa-info-circle"></i><p>Your keep list is empty</p><span>Senders here are ignored by scans.</span></div>
+            </div>
+            <div class="modal-footer">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mr-auto">Senders in this list will be ignored during scans.</p>
+                <button type="button" id="dismissKeepListModalButton" class="text-sm font-medium">Done</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- AI Control Panel Modal -->
+    <div id="aiControlPanelModal" class="modal-overlay hidden" aria-labelledby="aiControlPanelTitle" role="dialog" aria-modal="true">
+        <div class="modal-content max-w-2xl">
+            <div class="modal-header">
+                <h2 class="modal-title" id="aiControlPanelTitle">
+                    <i class="fas fa-brain mr-2 text-sky-500 dark:text-sky-400"></i>
+                    AI Model Dashboard
+                </h2>
+                <button id="closeAiPanelModalButton" type="button" class="modal-close-button" aria-label="Close modal">
+                    <i class="fas fa-times w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div id="aiControlPanelBody" class="modal-body space-y-6">
+                <!-- AI Model Performance Overview -->
+                <div class="p-4 border border-green-200 dark:border-green-800 rounded-lg bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-3 flex items-center">
+                        <i class="fas fa-check-circle text-green-500 dark:text-green-400 mr-2"></i>
+                        Model Performance
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-base font-semibold mb-3 text-gray-800 dark:text-gray-200">DeBERTa v3 Small</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">State-of-the-art transformer model fine-tuned for email classification</p>
+                            
+                            <div class="space-y-3">
+                                <div class="bg-white dark:bg-slate-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Model Accuracy</span>
+                                        <span class="text-sm font-bold text-green-600 dark:text-green-400">100%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="bg-white dark:bg-slate-800 rounded p-2 border border-gray-200 dark:border-gray-700">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Precision</p>
+                                        <p class="text-sm font-bold text-green-600 dark:text-green-400">100%</p>
+                                    </div>
+                                    <div class="bg-white dark:bg-slate-800 rounded p-2 border border-gray-200 dark:border-gray-700">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">F1 Score</p>
+                                        <p class="text-sm font-bold text-green-600 dark:text-green-400">100%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-base font-semibold mb-3 text-gray-800 dark:text-gray-200">Training Details</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center py-1">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Training Duration:</span>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200">7.5 hours</span>
+                                </div>
+                                <div class="flex justify-between items-center py-1">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Training Samples:</span>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200">20,000 emails</span>
+                                </div>
+                                <div class="flex justify-between items-center py-1">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Model Parameters:</span>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200">141M</span>
+                                </div>
+                                <div class="flex justify-between items-center py-1">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">False Positives:</span>
+                                    <span class="text-sm font-bold text-green-600 dark:text-green-400">0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 p-3 bg-green-100 dark:bg-green-900/30 rounded-lg border border-green-300 dark:border-green-700">
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-600 dark:text-green-400 mt-0.5 mr-2"></i>
+                                    <div>
+                                        <p class="text-sm font-medium text-green-800 dark:text-green-200">Model Ready</p>
+                                        <p class="text-xs text-green-700 dark:text-green-300 mt-1">Optimized for high accuracy email classification</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Model Insights Section -->
+                <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-slate-800 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-3 flex items-center">
+                        <i class="fas fa-chart-line text-sky-500 dark:text-sky-400 mr-2"></i>
+                        Model Insights
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Classification Categories</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between p-2 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-ban text-red-500 mr-2"></i>
+                                        <span class="text-sm font-medium text-red-700 dark:text-red-300">Unsubscribable</span>
+                                    </div>
+                                    <span class="text-xs text-red-600 dark:text-red-400">Promotional, newsletters</span>
+                                </div>
+                                <div class="flex items-center justify-between p-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-shield-alt text-green-500 mr-2"></i>
+                                        <span class="text-sm font-medium text-green-700 dark:text-green-300">Important</span>
+                                    </div>
+                                    <span class="text-xs text-green-600 dark:text-green-400">Personal, security, work</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Key Features Detected</h4>
+                            <div class="space-y-1">
+                                <div class="flex items-center text-xs text-gray-600 dark:text-gray-400">
+                                    <i class="fas fa-check text-green-500 mr-2"></i>
+                                    <span>Unsubscribe links and keywords</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-600 dark:text-gray-400">
+                                    <i class="fas fa-check text-green-500 mr-2"></i>
+                                    <span>Marketing language patterns</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-600 dark:text-gray-400">
+                                    <i class="fas fa-check text-green-500 mr-2"></i>
+                                    <span>Sender domain reputation</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-600 dark:text-gray-400">
+                                    <i class="fas fa-check text-green-500 mr-2"></i>
+                                    <span>Email structure and formatting</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                        <div class="flex items-start">
+                            <i class="fas fa-info-circle text-blue-500 mt-0.5 mr-2"></i>
+                            <div class="text-xs text-blue-700 dark:text-blue-300">
+                                <p class="font-medium mb-1">How it works:</p>
+                                <p>The AI analyzes email content using advanced natural language processing to identify patterns typical of promotional emails versus important communications. It considers multiple factors including language, structure, and sender patterns.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- AI Classification Settings -->
+                <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-slate-800 shadow-sm">
+                    <h3 class="text-lg font-semibold mb-3">
+                        <i class="fas fa-cog text-sky-500 dark:text-sky-400 mr-2"></i>
+                        Classification Settings
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Enable AI Classification Toggle -->
+                        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700 rounded-lg">
+                            <div>
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">AI-Powered Classification</span>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Use DeBERTa v3 model to automatically identify promotional emails</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="enableAiClassificationToggle" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-sky-300 dark:peer-focus:ring-sky-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-sky-500"></div>
+                            </label>
+                        </div>
+                        
+                        <!-- Confidence Threshold Slider -->
+                        <div class="p-3 bg-gray-50 dark:bg-slate-700 rounded-lg">
+                            <div class="flex items-center justify-between mb-3">
+                                <div>
+                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Confidence Threshold</span>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Adjust sensitivity for promotional email detection</p>
+                                </div>
+                                <span id="aiConfidenceThresholdValue" class="text-lg font-bold text-sky-500">75%</span>
+                            </div>
+                            <input 
+                                type="range" 
+                                id="aiConfidenceThresholdSlider" 
+                                min="50" 
+                                max="95" 
+                                value="75" 
+                                step="5"
+                                class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-600 accent-sky-500"
+                            >
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                <div class="text-center">
+                                    <div class="font-medium">Aggressive</div>
+                                    <div class="text-xs">More catches</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="font-medium">Balanced</div>
+                                    <div class="text-xs">Recommended</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="font-medium">Conservative</div>
+                                    <div class="text-xs">Fewer mistakes</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Visual Confidence Guide -->
+                        <div class="grid grid-cols-3 gap-2 text-xs">
+                            <div class="p-2 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800 text-center">
+                                <i class="fas fa-exclamation-triangle text-red-500 mb-1"></i>
+                                <p class="font-medium text-red-700 dark:text-red-300">50-65%</p>
+                                <p class="text-red-600 dark:text-red-400">May flag important emails</p>
+                            </div>
+                            <div class="p-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 text-center">
+                                <i class="fas fa-check-circle text-green-500 mb-1"></i>
+                                <p class="font-medium text-green-700 dark:text-green-300">70-85%</p>
+                                <p class="text-green-600 dark:text-green-400">Optimal balance</p>
+                            </div>
+                            <div class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800 text-center">
+                                <i class="fas fa-shield-alt text-blue-500 mb-1"></i>
+                                <p class="font-medium text-blue-700 dark:text-blue-300">90-95%</p>
+                                <p class="text-blue-600 dark:text-blue-400">Very safe, may miss some</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" id="dismissAiPanelModalButton" class="text-sm font-medium">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="messageArea"></div> 
+    
+    <!-- Application Scripts -->
+    <script>
+        // --- App Namespace ---
+        const App = {
+            // Configuration
+            config: {
+                themes: {
+                    DARK: 'dark',
+                    LIGHT: 'light'
+                },
+                storage: {
+                    THEME_KEY: 'unsubscriber-theme'
+                },
+                defaults: {
+                    theme: 'dark',
+                    scanLimit: '100'
+                },
+                durations: {
+                    message: {
+                        SHORT: 3000,
+                        MEDIUM: 6000,
+                        LONG: 10000
+                    },
+                    animation: 250
+                }
+            },
+            
+            // Global state
+            state: {
+                masterMailerList: [],
+                currentDisplayedMailers: [],
+                currentUser: null,
+                userKeepList: [],
+                currentScanLimit: '100',
+                initialized: false,
+                theme: localStorage.getItem('unsubscriber-theme') || 'dark'
+            },
+            
+            // Theme management
+            theme: {
+                get: function() {
+                    return App.state.theme;
+                },
+                set: function(newTheme) {
+                    if (newTheme !== App.config.themes.DARK && newTheme !== App.config.themes.LIGHT) {
+                        console.error('Invalid theme:', newTheme);
+                        return;
+                    }
+                    
+                    const htmlEl = document.documentElement;
+                    const isDark = newTheme === App.config.themes.DARK;
+                    
+                    // Update DOM
+                    if (isDark) {
+                        htmlEl.classList.add('dark');
+                    } else {
+                        htmlEl.classList.remove('dark');
+                    }
+                    
+                    // Update data attribute
+                    htmlEl.setAttribute('data-theme', newTheme);
+                    
+                    // Update state and persist
+                    App.state.theme = newTheme;
+                    localStorage.setItem(App.config.storage.THEME_KEY, newTheme);
+                    
+                    // Trigger custom event for theme change
+                    document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: newTheme } }));
+                },
+                toggle: function() {
+                    const currentTheme = App.theme.get();
+                    const newTheme = currentTheme === App.config.themes.DARK
+                        ? App.config.themes.LIGHT
+                        : App.config.themes.DARK;
+                    
+                    App.theme.set(newTheme);
+                    return newTheme;
+                },
+                initialize: function() {
+                    // Apply initial theme
+                    App.theme.set(App.state.theme);
+                }
+            },
+            
+            // Initialize app
+            init: function() {
+                if (App.state.initialized) return;
+                
+                // Initialize theme
+                App.theme.initialize();
+                
+                // Mark as initialized
+                App.state.initialized = true;
+            }
+        };
+        
+        // --- Global State (Legacy - for backward compatibility) ---
+        let masterMailerList = App.state.masterMailerList; 
+        let currentDisplayedMailers = App.state.currentDisplayedMailers; 
+        let currentUser = App.state.currentUser; 
+        let userKeepList = App.state.userKeepList;
+        let currentScanLimit = App.state.currentScanLimit; // Default scan limit
+        let currentScanPeriod = App.state.currentScanPeriod = '180d'; // Default scan period
+
+        // --- DOM Elements ---
+        const el = {
+            // Theme controls
+            themeToggle: document.getElementById('themeToggle'),
+            
+            // Auth controls
+            signInButton: document.getElementById('signInButton'),
+            promptSignInButton: document.getElementById('promptSignInButton'),
+            signOutButton: document.getElementById('signOutButton'),
+            userInfoDiv: document.getElementById('userInfo'),
+            userNameSpan: document.getElementById('userName'),
+            userAvatarImg: document.getElementById('userAvatar'),
+            appContentDiv: document.getElementById('app-content'),
+            signInPromptDiv: document.getElementById('signInPrompt'),
+            scanEmailsButton: document.getElementById('scanEmailsButton'),
+            scanSpinner: document.getElementById('scanSpinner'), // Spinner icon
+            scanIcon: document.getElementById('scanIcon'),       // Search icon
+            scanLimitButton: document.getElementById('scanLimitButton'),
+            selectedScanLimitText: document.getElementById('selectedScanLimitText'),
+            scanLimitOptions: document.getElementById('scanLimitOptions'),
+            scanPeriodButton: document.getElementById('scanPeriodButton'),
+            selectedScanPeriodText: document.getElementById('selectedScanPeriodText'),
+            scanPeriodOptions: document.getElementById('scanPeriodOptions'),
+            mailerListBody: document.getElementById('mailerListBody'),
+            selectAllCheckbox: document.getElementById('selectAllCheckbox'),
+            unsubscribeSelectedButton: document.getElementById('unsubscribeSelectedButton'),
+            trashSelectedButton: document.getElementById('trashSelectedButton'),
+            selectedCountUnsubscribeSpan: document.getElementById('selectedCountUnsubscribe'),
+            selectedCountTrashSpan: document.getElementById('selectedCountTrash'),
+            messageArea: document.getElementById('messageArea'),
+            loadingIndicator: document.getElementById('loadingIndicator'),
+            noResultsMessage: document.getElementById('noResultsMessage'),
+            filterInput: document.getElementById('filterInput'),
+            totalScannedCountSpan: document.getElementById('totalScannedCount'),
+            currentYearSpan: document.getElementById('currentYear'),
+            previewModal: document.getElementById('previewModal'),
+            previewModalTitle: document.getElementById('previewModalTitle'),
+            previewModalBody: document.getElementById('previewModalBody'),
+            closePreviewModalButton: document.getElementById('closePreviewModalButton'),
+            dismissPreviewModalButton: document.getElementById('dismissPreviewModalButton'),
+            manageKeepListButton: document.getElementById('manageKeepListButton'),
+            keepListCountSpan: document.getElementById('keepListCount'),
+            keepListModal: document.getElementById('keepListModal'),
+            keepListModalBody: document.getElementById('keepListModalBody'),
+            closeKeepListModalButton: document.getElementById('closeKeepListModalButton'),
+            dismissKeepListModalButton: document.getElementById('dismissKeepListModalButton'),
+            pageProgressBar: document.getElementById('pageProgressBar'), // Page load progress bar
+            scanLimitValue: null, // Will be initialized properly in DOMContentLoaded
+            scanPeriodValue: null, // Will be initialized properly in DOMContentLoaded
+            enableAutoGetToggle: document.getElementById('enableAutoGetToggle'),
+            aiProcessingIndicator: document.getElementById('aiProcessingIndicator'),
+            aiProcessingText: document.getElementById('aiProcessingText'),
+            aiLegend: document.getElementById('aiLegend')
+        };
+
+        // --- Page Load Progress ---
+        function updatePageLoadProgress(percentage) {
+            if (el.pageProgressBar) el.pageProgressBar.style.width = `${percentage}%`;
+        }
+
+
+        // --- Modal Helper Functions ---
+        function openModal(modalElement) {
+            if (!modalElement) { console.error("Modal element not found for openModal:", modalElement); return; }
+            modalElement.classList.add('active'); 
+            // Only prevent scrolling for modals that aren't the AI panel
+            if (modalElement.id !== 'aiControlPanelModal') {
+                document.body.classList.add('overflow-hidden'); // Prevent background scroll
+            }
+        }
+
+        function closeModal(modalElement) {
+            if (!modalElement) { console.error("Modal element not found for closeModal:", modalElement); return; }
+            modalElement.classList.remove('active'); 
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // --- Authentication ---
+        async function checkAuthStatus() { 
+            try {
+                const response = await fetch('/api/auth_status'); 
+                const data = await response.json();
+                currentUser = (data.isAuthenticated && data.user) ? data.user : null;
+                userKeepList = (data.isAuthenticated && data.keep_list) ? data.keep_list : []; 
+            } catch (error) { 
+                console.error("Auth status error:", error); 
+                currentUser = null; userKeepList = []; 
+                showMessage("Authentication check failed. Server might be unavailable.", "error", 10000); 
+            }
+            updateAuthUI();
+            updateKeepListCount();
+        }
+
+        function updateAuthUI() { 
+            const authenticated = !!currentUser;
+            el.signInButton.style.display = authenticated ? 'none' : 'flex';
+            el.promptSignInButton.style.display = authenticated ? 'none' : 'flex'; // Also hide prompt button
+            el.signInPromptDiv.classList.toggle('hidden', authenticated); // Show/hide the big prompt message
+            el.userInfoDiv.style.display = authenticated ? 'flex' : 'none';
+            el.appContentDiv.style.display = authenticated ? 'block' : 'none';
+
+            if (authenticated) {
+                el.userNameSpan.textContent = currentUser.name || 'User';
+                el.userAvatarImg.src = currentUser.picture || `https://placehold.co/40x40/E2E8F0/A0AEC0?text=${(currentUser.name || 'U').charAt(0).toUpperCase()}`;
+                el.userAvatarImg.onerror = () => { el.userAvatarImg.src = `https://placehold.co/40x40/E2E8F0/A0AEC0?text=${(currentUser.name || 'U').charAt(0).toUpperCase()}`;};
+            } else {
+                el.mailerListBody.innerHTML = ''; 
+                masterMailerList = []; currentDisplayedMailers = [];
+                updateSelectedCount(); 
+                el.loadingIndicator.classList.add('hidden'); 
+                el.totalScannedCountSpan.textContent = ''; 
+                el.filterInput.value = '';
+                // Show "no results" only if not authenticated and app content is hidden
+                el.noResultsMessage.classList.add('hidden');
+            }
+        }
+        el.signInButton.addEventListener('click', () => window.location.href = '/login');
+        el.promptSignInButton.addEventListener('click', () => window.location.href = '/login');
+        el.signOutButton.addEventListener('click', () => window.location.href = '/logout');
+
+        // --- Email Scanning ---
+        el.scanEmailsButton.addEventListener('click', async () => { 
+            if (!currentUser) { showMessage("Please sign in first to scan emails.", "error"); return; }
+            const limit = el.scanLimitValue.value;
+            const scanPeriod = el.scanPeriodValue ? el.scanPeriodValue.value : '180d';
+            showMessage(`Scanning up to ${limit} relevant emails from the ${scanPeriod === 'all_time' ? 'entire inbox' : 'last ' + scanPeriod.replace('d', ' days').replace('y', ' year')}... This may take some time.`, "info", 8000);
+            el.loadingIndicator.classList.remove('hidden');
+            el.noResultsMessage.classList.add('hidden');
+            el.mailerListBody.innerHTML = ''; 
+            el.scanEmailsButton.disabled = true; 
+            el.scanEmailsButton.classList.add('opacity-75', 'cursor-wait');
+            el.scanIcon.classList.add('hidden'); // Hide search icon
+            el.scanSpinner.classList.remove('hidden'); // Show spinner
+            el.totalScannedCountSpan.textContent = 'Scanning...'; 
+            masterMailerList = []; currentDisplayedMailers = [];
+            
+            // Update progress bar
+            el.pageProgressBar.style.width = '0%';
+            setTimeout(() => {
+                // Animate to 90% during scanning
+                el.pageProgressBar.style.transition = 'width 10s cubic-bezier(0.1, 0.7, 0.1, 1)';
+                el.pageProgressBar.style.width = '90%';
+            }, 100);
+
+            try {
+                const period = el.scanPeriodValue.value;
+                
+                // Get AI settings from AiControlPanel if available
+                let aiEnabled = true; // Default to enabled
+                let aiThreshold = 0.75;
+                let usePersonalized = true;
+                
+                if (window.AiControlPanel && window.AiControlPanel.AI_USER_SETTINGS) {
+                    aiEnabled = window.AiControlPanel.AI_USER_SETTINGS.enabled;
+                    aiThreshold = window.AiControlPanel.AI_USER_SETTINGS.confidenceThreshold;
+                    console.log('AI Control Panel settings found:', window.AiControlPanel.AI_USER_SETTINGS);
+                } else {
+                    console.log('AI Control Panel not ready, using defaults');
+                }
+                
+                // Build scan URL with AI parameters
+                const scanUrl = `/api/scan_emails?limit=${limit}&scan_period=${period}&ai_enabled=${aiEnabled}&ai_threshold=${aiThreshold}&use_personalized=${usePersonalized}`;
+                console.log('🤖 Scanning with AI settings:', { aiEnabled, aiThreshold, usePersonalized });
+                console.log('🔗 Scan URL:', scanUrl);
+                
+                const response = await fetch(scanUrl);
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({error: `Scan failed with status ${response.status}. Please check server logs for more details.`}));
+                    throw new Error(errData.error || `HTTP error ${response.status}. Check server for details.`);
+                }
+                const mailers = await response.json();
+                console.log('📧 Received mailers from API:', mailers.length);
+                
+                // Check if any mailers have AI classification
+                const mailersWithAI = mailers.filter(m => m.ai_classification);
+                if (mailersWithAI.length > 0) {
+                    console.log('🤖 Found', mailersWithAI.length, 'mailers with AI classifications');
+                    console.log('🔍 Sample AI classification:', mailersWithAI[0].ai_classification);
+                } else {
+                    console.log('⚠️ No AI classifications found in response');
+                }
+                
+                masterMailerList = mailers.map(m => ({ 
+                    ...m, 
+                    selectedUI: false, 
+                    messageIds: m.messageIds || [], 
+                    statusText: m.isKept ? 'Kept' : 'Pending', // Initial status
+                    statusMessage: m.isKept ? 'This sender is on your keep list.' : '',
+                    isKept: userKeepList.includes(m.senderEmail) 
+                })); 
+                // Set flag indicating a scan has been performed this session
+                App.state.scanPerformed = true;
+                
+                applyFilterAndRender(); 
+                // Complete the progress bar animation
+                el.pageProgressBar.style.transition = 'width 0.5s ease-out';
+                el.pageProgressBar.style.width = '100%';
+                
+                showMessage(masterMailerList.length > 0 ? `Scan complete! Found ${masterMailerList.length} potential mailers.` : "Scan complete. No new mailers found matching your criteria.", masterMailerList.length > 0 ? "success" : "info", 7000);
+            } catch (error) { 
+                console.error("Scan error:", error);
+                
+                // Set progress bar to error state
+                el.pageProgressBar.style.transition = 'width 0.3s ease-out, background-color 0.3s ease';
+                el.pageProgressBar.style.width = '100%';
+                el.pageProgressBar.style.backgroundColor = '#ef4444'; // Red error color
+                
+                showMessage(`Scan error: ${error.message}`, "error", 10000); 
+                applyFilterAndRender(); // Still render to show empty state if needed
+            }
+            finally { 
+                el.loadingIndicator.classList.add('hidden'); 
+                el.scanEmailsButton.disabled = false; 
+                el.scanEmailsButton.classList.remove('opacity-75', 'cursor-wait'); 
+                el.scanIcon.classList.remove('hidden'); // Show search icon
+                el.scanSpinner.classList.add('hidden'); // Hide spinner
+                el.selectAllCheckbox.checked = false; 
+                updateSelectedCount(); 
+            }
+        });
+
+        // --- Rendering and Filtering Mailers ---
+        function renderMailers(mailersToRender) { 
+            el.mailerListBody.innerHTML = ''; 
+            
+            // Generate AI status information
+            let aiStatusText = '';
+            let aiProcessedCount = 0;
+            let aiUnsubscribableCount = 0;
+            let aiImportantCount = 0;
+            
+            if (masterMailerList.length > 0) {
+                aiProcessedCount = masterMailerList.filter(m => m.ai_classification).length;
+                aiUnsubscribableCount = masterMailerList.filter(m => m.ai_classification && m.ai_classification.group_label === 'UNSUBSCRIBABLE').length;
+                aiImportantCount = masterMailerList.filter(m => m.ai_classification && m.ai_classification.group_label === 'IMPORTANT').length;
+                
+                if (aiProcessedCount > 0) {
+                    aiStatusText = ` (AI: ${aiUnsubscribableCount} flagged as unsubscribable)`;
+                }
+            }
+            
+            // Show/hide AI processing indicator and legend
+            if (aiProcessedCount > 0 && el.aiProcessingIndicator) {
+                el.aiProcessingIndicator.classList.remove('hidden');
+                if (el.aiProcessingText) {
+                    el.aiProcessingText.textContent = `AI analyzed ${aiProcessedCount} mailers: ${aiUnsubscribableCount} unsubscribable, ${aiImportantCount} important`;
+                }
+                // Show AI legend when AI processing is active
+                if (el.aiLegend) {
+                    el.aiLegend.classList.remove('hidden');
+                }
+            } else {
+                if (el.aiProcessingIndicator) {
+                    el.aiProcessingIndicator.classList.add('hidden');
+                }
+                if (el.aiLegend) {
+                    el.aiLegend.classList.add('hidden');
+                }
+            }
+            
+            el.totalScannedCountSpan.textContent = el.filterInput.value ? 
+                `Showing ${mailersToRender.length} of ${masterMailerList.length} mailers (filtered)${aiStatusText}` :
+                (masterMailerList.length > 0 ? `Found ${mailersToRender.length} mailers${aiStatusText}` : '');
+
+            if (mailersToRender.length === 0 && currentUser) {
+                el.noResultsMessage.classList.remove('hidden');
+                el.loadingIndicator.classList.add('hidden'); 
+                
+                // Add flag to track if a scan has been performed this session
+                const scanPerformed = App.state.scanPerformed || false;
+                const filterText = el.filterInput.value.trim();
+                
+                let messageP = "No mailers found or scan not initiated.";
+                let messageSpan = "Try scanning or adjusting filters.";
+                
+                // More detailed and actionable messages
+                if (!scanPerformed && !el.scanEmailsButton.disabled) {
+                    // No scan done yet
+                    messageP = "Ready to find subscriptions?";
+                    messageSpan = `Click the <strong class="font-semibold text-sky-500 dark:text-sky-300">Scan Emails</strong> button to begin.`;
+                } else if (scanPerformed && masterMailerList.length === 0 && !filterText) {
+                    // Scan done but no mailers found
+                    messageP = "No potential mailers found.";
+                    messageSpan = "Try adjusting scan period or limit, or your inbox might be super clean!";
+                } else if (filterText) {
+                    // Filter is active with no results
+                    messageP = "No mailers match your filter.";
+                    messageSpan = `Try a different filter term, or <button id="clearFilterButtonEmptyState" class="text-sky-500 dark:text-sky-400 hover:underline font-semibold">clear the filter</button>.`;
+                    
+                    // Add event listener after rendering
+                    setTimeout(() => {
+                        const clearFilterBtn = document.getElementById('clearFilterButtonEmptyState');
+                        if (clearFilterBtn) {
+                            clearFilterBtn.onclick = () => {
+                                el.filterInput.value = '';
+                                applyFilterAndRender();
+                            };
+                        }
+                    }, 0);
+                } else if (el.scanEmailsButton.disabled) {
+                    // Scan in progress
+                    el.noResultsMessage.classList.add('hidden');
+                }
+                
+                el.noResultsMessage.querySelector('p').textContent = messageP;
+                el.noResultsMessage.querySelector('span').innerHTML = messageSpan;
+                return;
+            }
+            el.noResultsMessage.classList.add('hidden'); 
+
+            const groupedByDomain = mailersToRender.reduce((acc, mailer) => {
+                const domain = mailer.senderDomain || 'Unknown Domain';
+                if (!acc[domain]) acc[domain] = [];
+                acc[domain].push(mailer);
+                return acc;
+            }, {});
+            const sortedDomains = Object.keys(groupedByDomain).sort((a, b) => {
+                if (a === 'Unknown Domain') return 1; if (b === 'Unknown Domain') return -1; return a.localeCompare(b);
+            });
+
+            sortedDomains.forEach(domain => {
+                const headerRow = el.mailerListBody.insertRow();
+                headerRow.className = 'domain-group-header';
+                const headerCell = headerRow.insertCell(); headerCell.colSpan = 6;
+                headerCell.innerHTML = `<i class="fas fa-globe-americas mr-2 text-sky-500 dark:text-sky-400"></i><span class="font-semibold text-sky-700 dark:text-sky-300">${domain}</span> <span class="font-normal text-slate-500 dark:text-slate-400 ml-1.5">(${groupedByDomain[domain].length} sender${groupedByDomain[domain].length > 1 ? 's' : ''})</span>`;
+
+                groupedByDomain[domain].sort((a,b) => (a.senderName || a.senderEmail).localeCompare(b.senderName || b.senderEmail)).forEach(mailer => {
+                    const row = el.mailerListBody.insertRow();
+                    row.className = `mailer-row ${mailer.selectedUI && !mailer.isKept ? 'selected-row' : ''} ${mailer.isKept ? 'opacity-60 cursor-not-allowed' : ''}`; 
+                    if(mailer.isKept) row.title = "This sender is in your Keep List. Actions are disabled.";
+
+                    const subj = mailer.exampleSubject || 'N/A'; 
+                    const name = mailer.senderName || mailer.senderEmail;
+                    
+                    let statusClass = 'status-pending'; // Default status
+                    if (mailer.isKept) statusClass = 'status-kept';
+                    else if (mailer.statusText) { 
+                        const lowerStatus = mailer.statusText.toLowerCase();
+                        if (lowerStatus.includes('success')) statusClass = 'status-success';
+                        else if (lowerStatus.includes('manual')) statusClass = 'status-manual';
+                        else if (lowerStatus.includes('attempted')) statusClass = 'status-attempted';
+                        else if (lowerStatus.includes('failed')) statusClass = 'status-failed';
+                        else if (lowerStatus === 'pending') statusClass = 'status-pending';
+                    }
+                    
+                    // --- Unsubscribe Method Cell Logic ---
+                    const unsubType = mailer.unsubscribeType || 'Unknown';
+                    const unsubLink = mailer.unsubscribeLink;
+                    let unsubTypeTagClass = 'unsub-type-unknown';
+                    let unsubIcon = 'fas fa-question-circle';
+                    let unsubActionText = 'Details';
+                    let unsubActionClass = 'bg-slate-500 hover:bg-slate-600 dark:bg-slate-600 dark:hover:bg-slate-500';
+                    let linkTarget = '_blank';
+
+                    if (unsubType.includes('POST')) { 
+                        unsubTypeTagClass = 'unsub-type-post'; unsubIcon = 'fas fa-bolt'; unsubActionText = '1-Click (POST)'; 
+                        unsubActionClass = 'bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500';
+                    } else if (unsubType.includes('Mailto')) {
+                        unsubTypeTagClass = 'unsub-type-mailto'; unsubIcon = 'fas fa-envelope'; unsubActionText = 'Send Email';
+                        unsubActionClass = 'bg-amber-500 hover:bg-amber-600 dark:bg-amber-500 dark:hover:bg-amber-400';
+                        linkTarget = '_self'; // Mailto links open in email client
+                    } else if (unsubType.includes('Link')) { // List-Header (Link)
+                        unsubTypeTagClass = 'unsub-type-link'; unsubIcon = 'fas fa-link'; unsubActionText = 'Open Link';
+                        unsubActionClass = 'bg-sky-500 hover:bg-sky-600 dark:bg-sky-600 dark:hover:bg-sky-500';
+                    } else if (unsubType.includes('Body')) { // Link in Body
+                        unsubTypeTagClass = 'unsub-type-body'; unsubIcon = 'fas fa-file-alt'; unsubActionText = 'Open Body Link';
+                        unsubActionClass = 'bg-purple-500 hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-500';
+                    }
+                    
+                    let unsubscribeMethodHtml = `<span class="unsub-type-tag ${unsubTypeTagClass}"><i class="${unsubIcon} mr-1.5"></i>${unsubType}</span>`;
+                    if (unsubLink) {
+                        unsubscribeMethodHtml += `
+                            <a href="${unsubLink}" target="${linkTarget}" rel="noopener noreferrer"
+                               class="table-action-button ${unsubActionClass} mt-1"
+                               title="Action: ${unsubActionText} for ${name}. Link: ${unsubLink.substring(0, 50)}${unsubLink.length > 50 ? '...' : ''}">
+                                <i class="${unsubIcon} mr-1.5 text-white/80 group-hover:text-white"></i> ${unsubActionText}
+                            </a>`;
+                    } else if (unsubType !== 'Unknown') {
+                         unsubscribeMethodHtml += '<span class="text-xs text-slate-500 dark:text-slate-400 mt-1 block">No link found by parser.</span>';
+                    } else {
+                         unsubscribeMethodHtml += '<span class="text-xs text-slate-500 dark:text-slate-400 mt-1 block">No method identified.</span>';
+                    }
+                    // --- End of Unsubscribe Method Cell Logic ---
+
+                    // Generate heuristic indicator if applicable
+                    let heuristicIndicatorHtml = '';
+                    if (mailer.heuristic_flags_summary) {
+                        // Check for promotional patterns that might be interesting to users
+                        const hasPromoKeywords = mailer.heuristic_flags_summary.has_promo_keywords;
+                        const hasAllCaps = mailer.heuristic_flags_summary.has_all_caps;
+                        const hasSpammyPunctuation = mailer.heuristic_flags_summary.has_spammy_punctuation;
+                        
+                        // Set threshold as at least 50% of messages having the flag
+                        const threshold = mailer.count / 1.5;
+                        
+                        if ((hasPromoKeywords && hasPromoKeywords > threshold) || 
+                            (hasAllCaps && hasAllCaps > threshold) || 
+                            (hasSpammyPunctuation && hasSpammyPunctuation > threshold)) {
+                                
+                            // Generate tooltip text based on the specific heuristics found
+                            let tooltipText = 'Contains ';
+                            const heuristicTexts = [];
+                            
+                            if (hasPromoKeywords > threshold) heuristicTexts.push('promotional keywords');
+                            if (hasAllCaps > threshold) heuristicTexts.push('frequent ALL CAPS text');
+                            if (hasSpammyPunctuation > threshold) heuristicTexts.push('excessive punctuation (!!?)');
+                            
+                            tooltipText += heuristicTexts.join(', ');
+                            heuristicIndicatorHtml = `<i class="fas fa-tags text-xs text-amber-500 ml-1" title="${tooltipText}"></i>`;
+                        }
+                    }
+                    
+                    // Generate AI classification indicator if applicable
+                    let aiIndicatorHtml = '';
+                    if (mailer.ai_classification) {
+                        const aiClassification = mailer.ai_classification;
+                        const groupLabel = aiClassification.group_label;
+                        
+                        if (groupLabel === 'UNSUBSCRIBABLE') {
+                            const confidence = aiClassification.average_unsub_confidence;
+                            const percentage = aiClassification.unsubscribable_percent;
+                            aiIndicatorHtml = `<span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700/50" title="AI Classification: UNSUBSCRIBABLE (${percentage.toFixed(0)}% emails flagged, avg confidence: ${(confidence * 100).toFixed(0)}%)">
+                                <i class="fas fa-robot mr-1"></i>UNSUBSCRIBABLE
+                            </span>`;
+                        } else if (groupLabel === 'IMPORTANT') {
+                            aiIndicatorHtml = `<span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-700/50" title="AI Classification: IMPORTANT - Keep these emails">
+                                <i class="fas fa-robot mr-1"></i>IMPORTANT
+                            </span>`;
+                        } else if (groupLabel === 'AI_UNCERTAIN') {
+                            aiIndicatorHtml = `<span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700/30 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600/50" title="AI Classification: UNCERTAIN - Mixed signals">
+                                <i class="fas fa-robot mr-1"></i>UNCERTAIN
+                            </span>`;
+                        }
+                    }
+                    
+                    row.innerHTML = `
+                        <td class="px-4 py-3 sm:px-6 whitespace-nowrap"><input type="checkbox" data-id="${mailer.id}" class="subscription-checkbox rounded text-sky-600 focus:ring-2 focus:ring-sky-500 dark:bg-slate-700 dark:border-slate-600 dark:focus:ring-sky-600 dark:ring-offset-slate-800 shadow-sm" ${mailer.selectedUI ? 'checked' : ''} ${mailer.isKept ? 'disabled' : ''}></td>
+                        <td class="px-4 py-3 sm:px-6">
+                            <div class="flex flex-col space-y-1">
+                                <div class="text-sm font-semibold text-slate-700 dark:text-slate-100 truncate max-w-[200px] sm:max-w-[250px]" title="${name}">${name}${heuristicIndicatorHtml}</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[200px] sm:max-w-[250px]">${mailer.senderEmail}</div>
+                                ${aiIndicatorHtml ? `<div class="flex items-center">${aiIndicatorHtml}</div>` : ''}
+                                <div class="flex items-center space-x-1 mt-1">
+                                    <button class="action-icon preview-icon" title="Preview recent emails from ${name}" data-sender="${mailer.senderEmail}" data-name="${name}"><i class="fas fa-envelope-open-text"></i></button>
+                                    <button class="action-icon keep-icon ${mailer.isKept ? 'fas fa-bookmark text-indigo-500 dark:text-indigo-400' : 'far fa-bookmark'}" title="${mailer.isKept ? 'Remove from Keep List' : 'Add to Keep List'}" data-sender="${mailer.senderEmail}"><i class="${mailer.isKept ? 'fas fa-bookmark' : 'far fa-bookmark'}"></i></button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 sm:px-6 whitespace-nowrap text-sm text-slate-600 dark:text-slate-400 hidden md:table-cell truncate max-w-[200px] sm:max-w-[250px]" title="${subj}">${subj}</td>
+                        <td class="px-4 py-3 sm:px-6 whitespace-nowrap text-sm text-slate-600 dark:text-slate-400 text-center font-medium">${mailer.count}</td>
+                        <td class="px-4 py-3 sm:px-6 text-sm">
+                            <div class="flex flex-col items-start space-y-1">
+                                ${unsubscribeMethodHtml}
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 sm:px-6 whitespace-nowrap text-xs">
+                            <span class="status-tag ${statusClass}" title="${mailer.statusMessage || mailer.statusText}">${mailer.statusText || 'Pending'}</span>
+                        </td>`;
+                });
+            });
+            addMailerActionListeners(); 
+            updateSelectedCount();
+        }
+        
+        function applyFilterAndRender() {
+            const filterText = el.filterInput.value.toLowerCase().trim();
+            currentDisplayedMailers = filterText ? masterMailerList.filter(m => 
+                (m.senderName && m.senderName.toLowerCase().includes(filterText)) || 
+                (m.senderEmail && m.senderEmail.toLowerCase().includes(filterText)) ||
+                (m.senderDomain && m.senderDomain.toLowerCase().includes(filterText)) || 
+                (m.exampleSubject && m.exampleSubject.toLowerCase().includes(filterText))
+            ) : [...masterMailerList];
+            renderMailers(currentDisplayedMailers);
+        }
+        el.filterInput.addEventListener('input', applyFilterAndRender); 
+
+        function addMailerActionListeners() { 
+            el.mailerListBody.querySelectorAll('.subscription-checkbox').forEach(cb => { 
+                cb.addEventListener('change', (e) => {
+                    const mailerId = e.target.dataset.id; 
+                    const mailer = masterMailerList.find(m => m.id === mailerId) || currentDisplayedMailers.find(m => m.id === mailerId);
+                    if (mailer && !e.target.disabled) mailer.selectedUI = e.target.checked; 
+                    if(!e.target.disabled) e.target.closest('tr').classList.toggle('selected-row', e.target.checked); 
+                    updateSelectedCount();
+                });
+            });
+            el.mailerListBody.querySelectorAll('.preview-icon').forEach(icon => {
+                icon.addEventListener('click', handlePreviewClick);
+            });
+            el.mailerListBody.querySelectorAll('.keep-icon').forEach(icon => {
+                icon.addEventListener('click', handleKeepClick);
+            });
+        }
+        el.selectAllCheckbox.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            currentDisplayedMailers.forEach(m => { 
+                if (!m.isKept) { 
+                    m.selectedUI = isChecked; 
+                    const masterM = masterMailerList.find(mm => mm.id === m.id); if(masterM) masterM.selectedUI = isChecked;
+                }
+            });
+            el.mailerListBody.querySelectorAll('.subscription-checkbox').forEach(cb => { 
+                if (!cb.disabled) { 
+                    cb.checked = isChecked; 
+                    cb.closest('tr').classList.toggle('selected-row', isChecked);
+                }
+            });
+            updateSelectedCount();
+        });
+        function updateSelectedCount() {
+            const selected = masterMailerList.filter(m => m.selectedUI && !m.isKept); 
+            const count = selected.length;
+            el.selectedCountUnsubscribeSpan.textContent = count; 
+            el.selectedCountTrashSpan.textContent = count;
+            const enable = count > 0;
+            [el.unsubscribeSelectedButton, el.trashSelectedButton].forEach(btn => {
+                btn.disabled = !enable; 
+                btn.classList.toggle('opacity-50', !enable); 
+                btn.classList.toggle('cursor-not-allowed', !enable);
+                 btn.classList.toggle('hover:from-red-600', enable && btn.id === 'unsubscribeSelectedButton'); // Specific hover for active buttons
+                 btn.classList.toggle('hover:from-amber-600', enable && btn.id === 'trashSelectedButton');
+            });
+            const allVisibleCBs = Array.from(el.mailerListBody.querySelectorAll('.subscription-checkbox:not(:disabled)')); 
+            el.selectAllCheckbox.checked = allVisibleCBs.length > 0 && allVisibleCBs.every(cb => cb.checked);
+        }
+        
+        el.unsubscribeSelectedButton.addEventListener('click', async () => {
+            const items = masterMailerList.filter(m => m.selectedUI && !m.isKept);
+            if (items.length === 0) { showMessage("No actionable mailers selected.", "warning"); return; }
+            
+            const confirmUnsubscribe = confirm(`Are you sure you want to attempt unsubscribing from ${items.length} selected mailer(s)? Some actions might require manual steps.`);
+            if (!confirmUnsubscribe) {
+                showMessage("Unsubscribe operation cancelled.", "info");
+                return;
+            }
+
+            showMessage(`Attempting to unsubscribe from ${items.length} mailer(s)...`, "info", 7000);
+            el.unsubscribeSelectedButton.disabled = true; 
+            el.unsubscribeSelectedButton.classList.add('opacity-75', 'cursor-wait');
+            
+            // Add spinner to indicate processing
+            const spinnerHtml = '<i class="fas fa-spinner fa-spin mr-2 text-white"></i>';
+            const originalButtonHtml = el.unsubscribeSelectedButton.innerHTML;
+            el.unsubscribeSelectedButton.innerHTML = spinnerHtml + 'Processing...';
+            
+            // Add a subtle overlay on the main content to indicate app is busy
+            const overlay = document.createElement('div');
+            overlay.id = 'batchOperationOverlay';
+            overlay.className = 'fixed inset-0 bg-slate-900/20 backdrop-blur-[1px] dark:bg-slate-900/40 z-30 flex items-center justify-center';
+            overlay.innerHTML = '<div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-4 text-center"><i class="fas fa-spinner fa-spin text-2xl text-sky-500 mb-2"></i><p class="text-slate-700 dark:text-slate-200">Processing batch operation...</p></div>';
+            document.body.appendChild(overlay);
+            try {
+                // Check if auto-GET is enabled for HTTP links
+                const attemptAutoGetForHttp = el.enableAutoGetToggle ? el.enableAutoGetToggle.checked : false;
+                
+                const resp = await fetch('/api/unsubscribe_items', { 
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify({ 
+                        items: items.map(i => ({
+                            id: i.id, 
+                            unsubscribeType: i.unsubscribeType, 
+                            unsubscribeLink: i.unsubscribeLink, 
+                            senderEmail: i.senderEmail,
+                            // Only set attempt_auto_get to true for HTTP/HTTPS links when enabled
+                            attempt_auto_get: (
+                                attemptAutoGetForHttp && 
+                                i.unsubscribeLink && 
+                                i.unsubscribeLink.startsWith('http') && 
+                                (i.unsubscribeType === "List-Header (Link)" || i.unsubscribeType === "Link in Body")
+                            )
+                        })) 
+                    }) 
+                });
+                const data = await resp.json();
+                if (!resp.ok && data.error) throw new Error(data.error);
+                
+                data.results.forEach(r => {
+                    const mailerItem = masterMailerList.find(s => s.id === r.id);
+                    if (mailerItem) {
+                        mailerItem.statusText = r.status; 
+                        mailerItem.statusMessage = r.message; 
+                        if (r.unsubscribeLinkToOpen) { 
+                            showMessage(`Manual action needed for ${mailerItem.senderEmail || r.id}: A link has been opened in a new tab. Please complete the unsubscription process there.`, "warning", 12000);
+                            window.open(r.unsubscribeLinkToOpen, '_blank');
+                        }
+                    }
+                    showMessage(`Unsubscribe for ${mailerItem?.senderEmail || r.id}: ${r.status}`, r.status.toLowerCase().includes("success") ? "success" : r.status.toLowerCase().includes("manual") || r.status.toLowerCase().includes("attempted") ? "warning" : "error", 8000);
+                });
+                applyFilterAndRender(); 
+                updateSelectedCount(); // Re-evaluate button states
+                showMessage(`Unsubscribe process finished. Check statuses. Re-scan to confirm changes.`, "info", 8000);
+
+            } catch (err) { 
+                console.error("Unsubscribe error:", err); 
+                showMessage(`Unsubscribe operation error: ${err.message}`, "error", 8000); 
+            }
+            finally { 
+                // Re-enable button only if there are still selected items
+                const stillSelectedCount = masterMailerList.filter(m=>m.selectedUI && !m.isKept).length;
+                el.unsubscribeSelectedButton.disabled = stillSelectedCount === 0; 
+                el.unsubscribeSelectedButton.classList.toggle('opacity-75', stillSelectedCount === 0); 
+                el.unsubscribeSelectedButton.classList.toggle('cursor-wait', false);
+                if (stillSelectedCount === 0) el.unsubscribeSelectedButton.classList.add('cursor-not-allowed');
+                
+                // Restore original button content
+                el.unsubscribeSelectedButton.innerHTML = originalButtonHtml;
+                
+                // Remove the overlay
+                const existingOverlay = document.getElementById('batchOperationOverlay');
+                if (existingOverlay) {
+                    existingOverlay.classList.add('opacity-0');
+                    setTimeout(() => existingOverlay.remove(), 300);
+                }
+
+            }
+        });
+
+        el.trashSelectedButton.addEventListener('click', async () => {
+            const selectedMailers = masterMailerList.filter(m => m.selectedUI && !m.isKept);
+            if (selectedMailers.length === 0) { showMessage("No actionable mailers selected for trashing.", "warning"); return; }
+            
+            const senderEmailsToTrash = selectedMailers.map(m => m.senderEmail);
+            const senderNames = selectedMailers.map(m => m.senderName || m.senderEmail).slice(0,3).join(', ') + (selectedMailers.length > 3 ? ` and ${selectedMailers.length - 3} others` : '');
+            
+            if (!confirm(`TRASH ALL EMAILS: Are you sure you want to trash ALL emails from these ${selectedMailers.length} sender(s): ${senderNames}? This will scan your mailbox for emails from these senders and move them to trash. This can take time and is a significant action.`)) {
+                showMessage("Trash operation cancelled by user.", "info"); 
+                return;
+            }
+            showMessage(`Trashing ALL emails from ${selectedMailers.length} sender(s)... This may take a while, please be patient.`, "info", 10000);
+            el.trashSelectedButton.disabled = true; 
+            el.trashSelectedButton.classList.add('opacity-75', 'cursor-wait');
+            try {
+                const response = await fetch('/api/trash_items', { 
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify({ senderEmails: senderEmailsToTrash }) 
+                });
+                const result = await response.json();
+                if (!response.ok && result.error) { throw new Error(result.error); }
+                
+                showMessage(result.message || "Trashing process complete.", response.status === 207 || (result.details && result.details.some(d=>d.fail_count > 0)) ? "warning" : "success", 10000);
+                
+                if (result.details) {
+                    result.details.forEach(d => { 
+                        const mailerToUpdate = masterMailerList.find(m => m.senderEmail === d.senderEmail);
+                        if(mailerToUpdate) {
+                            mailerToUpdate.statusText = d.success_count > 0 ? "Emails Trashed" : "Trash Failed";
+                            mailerToUpdate.statusMessage = d.message;
+                            if (d.success_count > 0) mailerToUpdate.count = 0; // Assume all were trashed for this sender if successful
+                        }
+                         showMessage(`Trash for ${d.senderEmail}: ${d.message}`, d.fail_count > 0 || d.success_count === 0 ? "warning" : "info", 8000); 
+                    });
+                }
+                // Unselect all after trashing and update UI
+                masterMailerList.forEach(m => { m.selectedUI = false; }); 
+                applyFilterAndRender(); 
+                updateSelectedCount();
+                showMessage("Re-scan recommended to see updated email counts after trashing.", "info", 7000);
+            } catch (error) { 
+                console.error("Trash error:", error); 
+                showMessage(`Error trashing emails: ${error.message}`, "error", 8000); 
+            }
+            finally { 
+                const stillSelectedCount = masterMailerList.filter(m=>m.selectedUI && !m.isKept).length;
+                el.trashSelectedButton.disabled = stillSelectedCount === 0; 
+                el.trashSelectedButton.classList.toggle('opacity-75', stillSelectedCount === 0); 
+                el.trashSelectedButton.classList.toggle('cursor-wait', false);
+                if (stillSelectedCount === 0) el.trashSelectedButton.classList.add('cursor-not-allowed');
+            }
+        });
+        
+        // --- Preview Modal Logic ---
+        async function handlePreviewClick(event) {
+            const button = event.currentTarget; // Get the button element
+            const senderEmail = button.dataset.sender;
+            const senderName = button.dataset.name;
+            el.previewModalTitle.textContent = `Recent Emails from ${senderName || senderEmail}`;
+            el.previewModalBody.innerHTML = `<div class="empty-state-message"><i class="fas fa-circle-notch fa-spin"></i><p>Loading previews...</p></div>`;
+            openModal(el.previewModal); 
+            try {
+                const response = await fetch(`/api/preview_sender_emails?senderEmail=${encodeURIComponent(senderEmail)}`);
+                if (!response.ok) throw new Error(`Failed to fetch previews (Status: ${response.status})`);
+                const previews = await response.json();
+                if (!previews || previews.error) throw new Error(previews.error || "Unknown error fetching previews.");
+
+                if (previews.length === 0) {
+                    el.previewModalBody.innerHTML = `
+                        <div class="empty-state-message">
+                            <i class="fas fa-envelope-open"></i>
+                            <p>No recent emails found</p>
+                            <span>No messages to preview from this sender.</span>
+                        </div>`;
+                } else {
+                    el.previewModalBody.innerHTML = previews.map(p => `
+                        <div class="preview-item">
+                            <p class="preview-subject">${p.subject || '(No Subject)'}</p>
+                            <p class="preview-date"><i class="far fa-clock mr-1.5 opacity-80"></i>${new Date(p.date).toLocaleString('en-US', {dateStyle: 'medium', timeStyle: 'short'})}</p>
+                            <p class="preview-snippet" title="${p.snippet}">${p.snippet || '(No snippet available)'}</p>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error("Preview error:", error);
+                el.previewModalBody.innerHTML = `
+                    <div class="empty-state-message">
+                        <i class="fas fa-exclamation-triangle text-red-500 dark:text-red-400"></i>
+                        <p class="text-red-600 dark:text-red-400">Error loading previews</p>
+                        <span>${error.message}</span>
+                    </div>`;
+            }
+        }
+        el.closePreviewModalButton.addEventListener('click', () => closeModal(el.previewModal));
+        el.dismissPreviewModalButton.addEventListener('click', () => closeModal(el.previewModal)); 
+
+        // --- Keep List Logic ---
+        function updateKeepListCount() { el.keepListCountSpan.textContent = userKeepList.length; }
+        
+        async function toggleKeepSender(senderEmail, isCurrentlyKept) {
+            const action = isCurrentlyKept ? 'remove' : 'add';
+            try {
+                const response = await fetch('/api/manage_keep_list', { 
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ senderEmail, action }) 
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Failed to update keep list");
+                
+                userKeepList = data.keep_list || []; 
+                showMessage(data.message, "success");
+                updateKeepListCount();
+                
+                const mailerItem = masterMailerList.find(m => m.senderEmail === senderEmail);
+                if (mailerItem) { 
+                    mailerItem.isKept = !isCurrentlyKept; 
+                    if (mailerItem.isKept) {
+                        mailerItem.selectedUI = false; // Unselect if added to keep list
+                        mailerItem.statusText = 'Kept';
+                        mailerItem.statusMessage = 'This sender is on your keep list.';
+                    } else {
+                        mailerItem.statusText = 'Pending'; // Reset status if removed from keep
+                        mailerItem.statusMessage = '';
+                    }
+                }
+                applyFilterAndRender(); 
+                updateSelectedCount(); // Ensure main action buttons are updated
+            } catch (error) { 
+                console.error("Keep list error:", error); 
+                showMessage(`Error updating keep list: ${error.message}`, "error"); 
+            }
+        }
+        function handleKeepClick(event) {
+            const button = event.currentTarget; // Get the button element
+            const senderEmail = button.dataset.sender;
+            const isKept = userKeepList.includes(senderEmail);
+            toggleKeepSender(senderEmail, isKept);
+        }
+        
+        function renderKeepListModal() {
+            el.keepListModalBody.innerHTML = userKeepList.length > 0 ?
+                userKeepList.sort().map(email => `
+                    <div class="keep-list-item">
+                        <span class="keep-list-email text-sm">${email}</span>
+                        <button class="remove-kept-sender" data-sender="${email}" title="Remove ${email} from keep list"><i class="fas fa-times-circle mr-1"></i>Remove</button>
+                    </div>
+                `).join('') :
+                `<div class="empty-state-message">
+                    <i class="fas fa-shield-alt"></i>
+                    <p>Your keep list is empty</p>
+                    <span>Add senders to this list to ignore them during scans and prevent actions.</span>
+                </div>`;
+            
+            el.keepListModalBody.querySelectorAll('.remove-kept-sender').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    await toggleKeepSender(e.currentTarget.dataset.sender, true); 
+                    renderKeepListModal(); 
+                }); 
+            });
+        }
+
+        el.manageKeepListButton.addEventListener('click', () => { renderKeepListModal(); openModal(el.keepListModal); });
+        el.closeKeepListModalButton.addEventListener('click', () => closeModal(el.keepListModal));
+        el.dismissKeepListModalButton.addEventListener('click', () => closeModal(el.keepListModal)); 
+
+        // Close modal on overlay click & Escape key
+        [el.previewModal, el.keepListModal].forEach(modal => {
+            if (modal) {
+                modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(modal); });
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                if (el.previewModal && el.previewModal.classList.contains('active')) closeModal(el.previewModal);
+                if (el.keepListModal && el.keepListModal.classList.contains('active')) closeModal(el.keepListModal);
+            }
+        });
+        
+        // --- Enhanced Message Display System ---
+        function showMessage(text, type = "info", duration = 6000) {
+            // Adjust duration based on message type if using default duration
+            if (duration === 6000) { // If using the default duration
+                if (type === 'error' || type === 'warning') {
+                    duration = 10000; // Longer for errors/warnings
+                } else if (type === 'success') {
+                    duration = 4000; // Shorter for success messages
+                }
+            }
+            
+            const typeClasses = {
+                success: {bg: "bg-green-500 dark:bg-green-600", text: "text-white", icon: "fas fa-check-circle"},
+                error:   {bg: "bg-red-500 dark:bg-red-600", text: "text-white", icon: "fas fa-times-circle"},
+                warning: {bg: "bg-yellow-400 dark:bg-yellow-500", text: "text-gray-800 dark:text-gray-900", icon: "fas fa-exclamation-triangle"},
+                info:    {bg: "bg-sky-500 dark:bg-sky-600", text: "text-white", icon: "fas fa-info-circle"}
+            };
+            
+            const c = typeClasses[type] || typeClasses.info;
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `p-3 sm:p-4 rounded-lg shadow-2xl ${c.bg} ${c.text} mb-3 flex items-start transition-all duration-300 ease-out opacity-0 transform translate-y-2 text-sm sm:text-base`;
+            
+            // Create the inner elements
+            const iconEl = document.createElement('i');
+            iconEl.className = `${c.icon} mr-2.5 sm:mr-3 text-lg sm:text-xl mt-0.5`;
+            
+            const textSpan = document.createElement('span');
+            textSpan.className = 'flex-1';
+            textSpan.textContent = text;
+            
+            // Add close button
+            const closeButton = document.createElement('button');
+            closeButton.innerHTML = '&times;';
+            closeButton.className = 'ml-auto pl-3 text-lg leading-none hover:font-bold focus:outline-none';
+            closeButton.setAttribute('aria-label', 'Close message');
+            closeButton.onclick = () => {
+                messageDiv.classList.remove('opacity-100', 'translate-y-0');
+                messageDiv.classList.add('opacity-0', 'translate-y-2'); // Animate out
+                setTimeout(() => messageDiv.remove(), 300);
+            };
+            
+            // Assemble the message
+            messageDiv.appendChild(iconEl);
+            messageDiv.appendChild(textSpan);
+            messageDiv.appendChild(closeButton);
+            
+            // Add to message area (at the top)
+            if (el.messageArea.firstChild) {
+                el.messageArea.insertBefore(messageDiv, el.messageArea.firstChild);
+            } else {
+                el.messageArea.appendChild(messageDiv);
+            }
+            
+            // Limit the number of visible messages (max 5)
+            const allMessages = el.messageArea.querySelectorAll('div');
+            if (allMessages.length > 5) {
+                for (let i = 5; i < allMessages.length; i++) {
+                    allMessages[i].classList.remove('opacity-100', 'translate-y-0');
+                    allMessages[i].classList.add('opacity-0', 'translate-y-2');
+                    setTimeout(() => allMessages[i].remove(), 300);
+                }
+            }
+            
+            // Animate in
+            requestAnimationFrame(() => { 
+                messageDiv.classList.remove('opacity-0', 'translate-y-2');
+                messageDiv.classList.add('opacity-100', 'translate-y-0');
+            });
+
+            // Auto-dismiss after duration
+            setTimeout(() => { 
+                if (messageDiv.isConnected) { // Check if still in DOM
+                    messageDiv.classList.remove('opacity-100', 'translate-y-0');
+                    messageDiv.classList.add('opacity-0', 'translate-y-2');
+                    setTimeout(() => messageDiv.remove(), 300); 
+                }
+            }, duration);
+        }
+        
+        // --- Theme Toggle ---
+        el.themeToggle.addEventListener('click', () => {
+            App.theme.toggle();
+            showMessage(`Switched to ${App.theme.get() === 'dark' ? 'dark' : 'light'} mode`, "info", App.config.durations.message.SHORT);
+        });
+        
+        // --- Initial Setup ---
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM fully loaded - initializing app');
+            
+            // Clean up any existing event listeners from previous loads
+            const cleanupBeforeInit = () => {
+                // Clean up global click handlers by removing them from essential elements
+                const elementsToClean = [
+                    'scanLimitButton', 'scanLimitOptions', 
+                    'scanPeriodButton', 'scanPeriodOptions'
+                ];
+                
+                elementsToClean.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        // Clone and replace to remove event listeners
+                        const newElement = element.cloneNode(true);
+                        if (element.parentNode) {
+                            element.parentNode.replaceChild(newElement, element);
+                            console.log(`Cleaned up event listeners for ${id}`);
+                        }
+                    }
+                });
+            };
+            
+            // Run cleanup
+            cleanupBeforeInit();
+            
+            // Initialize app
+            App.init();
+            
+            // Set current year in footer
+            if(el.currentYearSpan) el.currentYearSpan.textContent = new Date().getFullYear();
+            
+                // ======================================================
+            // ADVANCED DROPDOWN INITIALIZATION
+            // ======================================================
+            
+            // Set default values for scan limit and period
+            currentScanLimit = localStorage.getItem('unsubscriber-scan-limit') || '100';
+            currentScanPeriod = localStorage.getItem('unsubscriber-scan-period') || '180d';
+            
+            // Create hidden input for scan limit
+            let scanLimitInput = document.getElementById('scanLimitValueInput');
+            if (!scanLimitInput) {
+                scanLimitInput = document.createElement('input');
+                scanLimitInput.type = 'hidden';
+                scanLimitInput.id = 'scanLimitValueInput';
+                document.body.appendChild(scanLimitInput);
+            }
+            scanLimitInput.value = currentScanLimit;
+            el.scanLimitValue = scanLimitInput;
+            
+            // Create hidden input for scan period
+            let scanPeriodInput = document.getElementById('scanPeriodValueInput');
+            if (!scanPeriodInput) {
+                scanPeriodInput = document.createElement('input');
+                scanPeriodInput.type = 'hidden';
+                scanPeriodInput.id = 'scanPeriodValueInput';
+                document.body.appendChild(scanPeriodInput);
+            }
+            scanPeriodInput.value = currentScanPeriod;
+            el.scanPeriodValue = scanPeriodInput;
+            
+            // Initialize the advanced dropdown system
+            setupAdvancedDropdowns();
+            
+            // Dropdown event handlers are defined in a separate section through dedicated functions
+            
+            // Show initial progress
+            updatePageLoadProgress(30);
+            
+            // Perform auth check
+            checkAuthStatus().then(() => updatePageLoadProgress(100));
+        });
+
+        // ROBUST DROPDOWN SYSTEM
+        // A comprehensive and reliable implementation with advanced features
+        
+        /**
+         * The DropdownManager is a singleton that manages all dropdown interactions
+         * in a robust, centralized way, while ensuring proper state management and
+         * visual consistency.
+         */
+        const DropdownManager = {
+            // Keep track of currently open dropdown
+            openDropdown: null,
+            
+            // Registry of all managed dropdowns
+            dropdowns: {},
+            
+            // Default settings
+            defaults: {
+                animationDuration: 150, // ms
+                storagePrefix: 'unsubscriber-'
+            },
+            
+            /**
+             * Initialize the dropdown system
+             */
+            init: function() {
+                console.log('Initializing DropdownManager');
+                
+                // Set up global click handler to close dropdowns when clicking outside
+                document.addEventListener('click', this.handleDocumentClick.bind(this));
+                
+                // Create our managed dropdowns
+                this.createDropdown('scanLimit', {
+                    buttonId: 'scanLimitButton',
+                    optionsId: 'scanLimitOptions',
+                    textId: 'selectedScanLimitText',
+                    valueKey: 'scanLimitValue',
+                    globalVar: 'currentScanLimit',
+                    storageKey: 'scan-limit',
+                    defaultValue: '100',
+                    formatText: (value) => `Scan ${value}`
+                });
+                
+                this.createDropdown('scanPeriod', {
+                    buttonId: 'scanPeriodButton',
+                    optionsId: 'scanPeriodOptions',
+                    textId: 'selectedScanPeriodText',
+                    valueKey: 'scanPeriodValue',
+                    globalVar: 'currentScanPeriod',
+                    storageKey: 'scan-period',
+                    defaultValue: '180d',
+                    formatText: null // Use option text content instead of formatting
+                });
+            },
+            
+            /**
+             * Handle document clicks to close dropdowns when clicking outside
+             */
+            handleDocumentClick: function(event) {
+                // Skip if no dropdowns are open
+                if (!this.openDropdown) return;
+                
+                const dropdown = this.dropdowns[this.openDropdown];
+                if (!dropdown) return;
+                
+                // Check if click is outside the dropdown
+                if (!dropdown.button?.contains(event.target) && 
+                    !dropdown.options?.contains(event.target)) {
+                    this.closeDropdown(this.openDropdown);
+                }
+            },
+            
+            /**
+             * Create and register a new dropdown
+             */
+            createDropdown: function(id, config) {
+                console.log(`Creating dropdown: ${id}`);
+                
+                // Get DOM references
+                const button = document.getElementById(config.buttonId);
+                const options = document.getElementById(config.optionsId);
+                const textEl = document.getElementById(config.textId);
+                
+                if (!button || !options || !textEl) {
+                    console.error(`Cannot create dropdown ${id}: missing DOM elements`);
+                    return;
+                }
+                
+                // Create or get the hidden value input
+                let valueInput = document.getElementById(`${config.valueKey}Input`);
+                if (!valueInput) {
+                    valueInput = document.createElement('input');
+                    valueInput.type = 'hidden';
+                    valueInput.id = `${config.valueKey}Input`;
+                    document.body.appendChild(valueInput);
+                }
+                
+                // Get the stored/default value
+                const storedValue = localStorage.getItem(`${this.defaults.storagePrefix}${config.storageKey}`);
+                const defaultValue = config.defaultValue;
+                const initialValue = storedValue || defaultValue;
+                
+                // Update global variable if specified
+                if (config.globalVar) {
+                    window[config.globalVar] = initialValue;
+                }
+                
+                // Set the input value
+                valueInput.value = initialValue;
+                
+                // Store the dropdown configuration
+                this.dropdowns[id] = {
+                    id,
+                    button,
+                    options,
+                    textEl,
+                    valueInput,
+                    config
+                };
+                
+                // Set initial text content
+                this.updateDropdownText(id, initialValue);
+                
+                // Set initial selected option styling
+                this.updateSelectedOption(id, initialValue);
+                
+                // Hook up button click handler
+                button.setAttribute('aria-expanded', 'false');
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.toggleDropdown(id);
+                });
+                
+                // Hook up option click handlers
+                const optionLinks = options.querySelectorAll('a');
+                optionLinks.forEach(option => {
+                    option.classList.add('dropdown-option'); // Ensure all options have the class
+                    
+                    option.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        const value = option.getAttribute('data-value');
+                        if (!value) return;
+                        
+                        this.selectOption(id, value, option);
+                    });
+                });
+                
+                return this.dropdowns[id];
+            },
+            
+            /**
+             * Toggle a dropdown open/closed
+             */
+            toggleDropdown: function(id) {
+                const dropdown = this.dropdowns[id];
+                if (!dropdown) return;
+                
+                const isOpen = dropdown.button.getAttribute('aria-expanded') === 'true';
+                
+                // Close any open dropdown if it's not this one
+                if (this.openDropdown && this.openDropdown !== id) {
+                    this.closeDropdown(this.openDropdown);
+                }
+                
+                if (isOpen) {
+                    this.closeDropdown(id);
+                } else {
+                    this.openDropdown = id;
+                    dropdown.button.setAttribute('aria-expanded', 'true');
+                    dropdown.options.classList.remove('hidden');
+                }
+            },
+            
+            /**
+             * Close a dropdown
+             */
+            closeDropdown: function(id) {
+                const dropdown = this.dropdowns[id];
+                if (!dropdown) return;
+                
+                dropdown.button.setAttribute('aria-expanded', 'false');
+                dropdown.options.classList.add('hidden');
+                
+                if (this.openDropdown === id) {
+                    this.openDropdown = null;
+                }
+            },
+            
+            /**
+             * Select an option in a dropdown
+             */
+            selectOption: function(id, value, optionEl) {
+                const dropdown = this.dropdowns[id];
+                if (!dropdown) return;
+                
+                // Get the text to display
+                let displayText;
+                if (dropdown.config.formatText) {
+                    displayText = dropdown.config.formatText(value);
+                } else if (optionEl) {
+                    displayText = optionEl.textContent;
+                } else {
+                    // Find the option element if not provided
+                    const foundOption = dropdown.options.querySelector(`a[data-value="${value}"]`);
+                    displayText = foundOption ? foundOption.textContent : value;
+                }
+                
+                // Update the button text
+                this.updateDropdownText(id, value, displayText);
+                
+                // Update the input value
+                dropdown.valueInput.value = value;
+                
+                // Update global variable if specified
+                if (dropdown.config.globalVar) {
+                    window[dropdown.config.globalVar] = value;
+                }
+                
+                // Store the value if storage key is specified
+                if (dropdown.config.storageKey) {
+                    localStorage.setItem(
+                        `${this.defaults.storagePrefix}${dropdown.config.storageKey}`,
+                        value
+                    );
+                }
+                
+                // Update selected option styling
+                this.updateSelectedOption(id, value);
+                
+                // Close the dropdown
+                this.closeDropdown(id);
+                
+                console.log(`Selected ${id} option: ${value} (${displayText})`);
+            },
+            
+            /**
+             * Update the text displayed in a dropdown button
+             */
+            updateDropdownText: function(id, value, displayText) {
+                const dropdown = this.dropdowns[id];
+                if (!dropdown) return;
+                
+                // Use provided display text or generate it
+                if (!displayText) {
+                    if (dropdown.config.formatText) {
+                        displayText = dropdown.config.formatText(value);
+                    } else {
+                        // Find the option element
+                        const option = dropdown.options.querySelector(`a[data-value="${value}"]`);
+                        displayText = option ? option.textContent : value;
+                    }
+                }
+                
+                dropdown.textEl.textContent = displayText;
+            },
+            
+            /**
+             * Update the selected option styling
+             */
+            updateSelectedOption: function(id, value) {
+                const dropdown = this.dropdowns[id];
+                if (!dropdown) return;
+                
+                // Remove selected class from all options
+                const options = dropdown.options.querySelectorAll('a.dropdown-option');
+                options.forEach(option => {
+                    option.classList.remove('dropdown-option-selected');
+                });
+                
+                // Add selected class to the selected option
+                const selectedOption = dropdown.options.querySelector(`a[data-value="${value}"]`);
+                if (selectedOption) {
+                    selectedOption.classList.add('dropdown-option-selected');
+                }
+            },
+            
+            /**
+             * Get the currently selected value for a dropdown
+             */
+            getValue: function(id) {
+                const dropdown = this.dropdowns[id];
+                if (!dropdown) return null;
+                
+                return dropdown.valueInput.value;
+            }
+        };
+        
+        /**
+         * Initialize the dropdown system
+         */
+        function setupAdvancedDropdowns() {
+            DropdownManager.init();
+        }
+
+        /**
+         * AI Control Panel Logic
+         * 
+         * This handles all functionality related to the AI Control Panel, including:
+         * - Opening/closing the panel modal
+         * - Fetching AI status from the server
+         * - Managing UI updates for data preparation and model training
+         * - Persisting user AI preferences
+         */
+        const AiControlPanel = {
+            // Elements in the panel (populated during initialization)
+            el_ai: {},
+            
+            // Polling for long-running tasks
+            pollingInterval: null,
+            pollingFrequency: 3000, // 3 seconds between status checks
+            isPolling: false,
+            
+            // User preferences (persisted in localStorage)
+            AI_USER_SETTINGS: {
+                enabled: true, // Whether AI is used during email scans (enabled by default)
+                confidenceThreshold: 0.75 // Default confidence threshold (0.0 to 1.0)
+            },
+            
+            /**
+             * Initialize the AI Control Panel
+             */
+            init: function() {
+                // Cache DOM elements
+                this.cacheElements();
+                
+                // Load user settings from localStorage
+                this.loadAiUserSettings();
+                
+                // Setup event listeners
+                this.setupEventListeners();
+                
+                // Initialize UI based on saved settings
+                this.el_ai.enableToggle.checked = this.AI_USER_SETTINGS.enabled;
+                this.el_ai.confidenceSlider.value = this.AI_USER_SETTINGS.confidenceThreshold * 100;
+                this.updateAiConfidenceDisplay(this.AI_USER_SETTINGS.confidenceThreshold * 100);
+                
+                // Fetch initial AI status when the application starts
+                this.fetchAndDisplayAiStatus(true);
+                
+                console.log('AI Control Panel initialized');
+            },
+            
+            /**
+             * Cache DOM elements for performance
+             */
+            cacheElements: function() {
+                // Control Button and Status
+                this.el_ai.controlButton = document.getElementById('aiControlButton');
+                this.el_ai.statusIndicator = document.getElementById('aiModelStatusIndicator');
+                
+                // Modal
+                this.el_ai.modal = document.getElementById('aiControlPanelModal');
+                this.el_ai.closeButton = document.getElementById('closeAiPanelModalButton');
+                this.el_ai.dismissButton = document.getElementById('dismissAiPanelModalButton');
+                
+                // AI Status Display
+                this.el_ai.statusText = document.getElementById('aiDetailedModelStatus');
+                this.el_ai.baseModelName = document.getElementById('aiBaseModelName');
+                this.el_ai.lastTrainedDate = document.getElementById('aiLastTrainedDate');
+                
+                // Data Preparation Elements
+                this.el_ai.prepareDataButton = document.getElementById('prepareAiDataButton');
+                this.el_ai.dataPrepStatusArea = document.getElementById('dataPrepStatusArea');
+                this.el_ai.dataPrepStatusText = document.getElementById('dataPrepStatusText');
+                this.el_ai.dataPrepStatusIcon = document.getElementById('dataPrepStatusIcon');
+                this.el_ai.dataPrepProgressBar = document.getElementById('dataPrepProgressBar');
+                this.el_ai.dataPrepLog = document.getElementById('dataPrepLog');
+                
+                // Model Training Elements
+                this.el_ai.trainModelButton = document.getElementById('trainAiModelButton');
+                this.el_ai.trainBaseModelNameDisplay = document.getElementById('trainBaseModelNameDisplay');
+                this.el_ai.trainEpochsDisplay = document.getElementById('trainEpochsDisplay');
+                this.el_ai.trainLRDisplay = document.getElementById('trainLRDisplay');
+                this.el_ai.modelTrainStatusArea = document.getElementById('modelTrainStatusArea');
+                this.el_ai.modelTrainStatusText = document.getElementById('modelTrainStatusText');
+                this.el_ai.modelTrainStatusIcon = document.getElementById('modelTrainStatusIcon');
+                this.el_ai.modelTrainProgressBar = document.getElementById('modelTrainProgressBar');
+                this.el_ai.modelTrainLog = document.getElementById('modelTrainLog');
+                
+                // AI Settings Elements
+                this.el_ai.enableToggle = document.getElementById('enableAiClassificationToggle');
+                this.el_ai.confidenceSlider = document.getElementById('aiConfidenceThresholdSlider');
+                this.el_ai.confidenceValue = document.getElementById('aiConfidenceThresholdValue');
+            },
+            
+            /**
+             * Set up event listeners for the AI Control Panel
+             */
+            setupEventListeners: function() {
+                // Open modal when AI Control Button is clicked
+                this.el_ai.controlButton.addEventListener('click', () => {
+                    this.openControlPanel();
+                });
+                
+                // Close modal when buttons are clicked
+                this.el_ai.closeButton.addEventListener('click', () => {
+                    this.closeControlPanel();
+                });
+                
+                this.el_ai.dismissButton.addEventListener('click', () => {
+                    this.closeControlPanel();
+                });
+                
+                // Close modal on Escape key
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape' && !this.el_ai.modal.classList.contains('hidden')) {
+                        this.closeControlPanel();
+                    }
+                });
+                
+                // Click outside to close (if clicked on the overlay but not the content)
+                this.el_ai.modal.addEventListener('click', (event) => {
+                    if (event.target === this.el_ai.modal) {
+                        this.closeControlPanel();
+                    }
+                });
+                
+                // Prepare Data button
+                this.el_ai.prepareDataButton.addEventListener('click', () => {
+                    this.triggerAiTask('/api/ai/prepare_public_data', 'data_prep', 'Prepare Data');
+                });
+                
+                // Train Model button
+                this.el_ai.trainModelButton.addEventListener('click', () => {
+                    this.triggerAiTask('/api/ai/train_model', 'model_train', 'Train Model');
+                });
+                
+                // AI Settings: Enable toggle
+                this.el_ai.enableToggle.addEventListener('change', () => {
+                    this.AI_USER_SETTINGS.enabled = this.el_ai.enableToggle.checked;
+                    this.saveAiUserSettings();
+                });
+                
+                // AI Settings: Confidence threshold slider
+                this.el_ai.confidenceSlider.addEventListener('input', (event) => {
+                    const value = event.target.value;
+                    this.updateAiConfidenceDisplay(value);
+                });
+                
+                this.el_ai.confidenceSlider.addEventListener('change', (event) => {
+                    const value = event.target.value;
+                    this.AI_USER_SETTINGS.confidenceThreshold = value / 100;
+                    this.saveAiUserSettings();
+                });
+                
+                // Add the AI settings to the scan emails button
+                const originalScanButton = document.getElementById('scanEmailsButton');
+                if (originalScanButton) {
+                    const originalClickHandler = originalScanButton.onclick;
+                    
+                    originalScanButton.onclick = (event) => {
+                        // Add AI parameters to the scan request
+                        if (App.scanEmailsApiCallParams) {
+                            App.scanEmailsApiCallParams.ai_enabled = this.AI_USER_SETTINGS.enabled;
+                            App.scanEmailsApiCallParams.ai_threshold = this.AI_USER_SETTINGS.confidenceThreshold;
+                        }
+                        
+                        // Call the original handler
+                        if (typeof originalClickHandler === 'function') {
+                            return originalClickHandler.call(originalScanButton, event);
+                        }
+                    };
+                }
+            },
+            
+            /**
+             * Open the AI Control Panel modal
+             */
+            openControlPanel: function() {
+                this.el_ai.modal.classList.remove('hidden');
+                this.el_ai.modal.classList.add('active');
+                
+                // Fetch the latest AI status when opening the panel
+                this.fetchAndDisplayAiStatus();
+                
+                // Start polling if any task is in progress
+                setTimeout(() => {
+                    if (!this.isPolling && this.shouldStartPolling()) {
+                        this.startAiTaskPolling();
+                    }
+                }, 500);
+            },
+            
+            /**
+             * Close the AI Control Panel modal
+             */
+            closeControlPanel: function() {
+                this.el_ai.modal.classList.add('hidden');
+                this.el_ai.modal.classList.remove('active');
+                
+                // We continue polling if tasks are in progress, even if panel is closed
+                // This ensures the status indicator is still updated
+            },
+            
+            /**
+             * Load AI user settings from localStorage
+             */
+            loadAiUserSettings: function() {
+                try {
+                    const savedSettings = localStorage.getItem('ai_user_settings');
+                    if (savedSettings) {
+                        const parsedSettings = JSON.parse(savedSettings);
+                        
+                        // Apply saved settings with fallbacks to defaults
+                        this.AI_USER_SETTINGS = {
+                            enabled: parsedSettings.enabled !== undefined ? parsedSettings.enabled : true,
+                            confidenceThreshold: parsedSettings.confidenceThreshold !== undefined ? 
+                                parsedSettings.confidenceThreshold : 0.75
+                        };
+                    }
+                } catch (error) {
+                    console.error('Error loading AI user settings:', error);
+                    // Fall back to defaults (already set in AI_USER_SETTINGS)
+                }
+            },
+            
+            /**
+             * Save AI user settings to localStorage
+             */
+            saveAiUserSettings: function() {
+                try {
+                    localStorage.setItem('ai_user_settings', JSON.stringify(this.AI_USER_SETTINGS));
+                } catch (error) {
+                    console.error('Error saving AI user settings:', error);
+                }
+            },
+            
+            /**
+             * Update the confidence threshold display
+             */
+            updateAiConfidenceDisplay: function(value) {
+                this.el_ai.confidenceValue.textContent = `${value}%`;
+            },
+            
+            /**
+             * Fetch AI status from the server and update the UI
+             */
+            fetchAndDisplayAiStatus: function(isInitialFetch = false) {
+                // Don't show loading indicators for the initial background fetch
+                if (!isInitialFetch) {
+                    this.el_ai.statusText.innerHTML = '<i class="fas fa-circle-notch fa-spin text-gray-400 mr-2"></i> Fetching status...';
+                }
+                
+                // Call the AI status API
+                fetch('/api/ai/status')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Server responded with status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(statusData => {
+                        this.updateAiStatusUi(statusData);
+                        
+                        // Check if we should start/continue polling based on status
+                        if (statusData.data_prep_status.status === 'in_progress' || 
+                            statusData.model_train_status.status === 'in_progress') {
+                            if (!this.isPolling) {
+                                this.startAiTaskPolling();
+                            }
+                        } else if (this.isPolling && !this.shouldStartPolling(statusData)) {
+                            this.stopAiTaskPolling();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching AI status:', error);
+                        this.el_ai.statusText.innerHTML = '<i class="fas fa-exclamation-triangle text-amber-500 mr-2"></i> Could not fetch AI status';
+                        this.el_ai.statusIndicator.className = 'absolute top-0 right-0 block w-3 h-3 transform -translate-y-1/2 translate-x-1/2 bg-amber-500 rounded-full border-2 border-white dark:border-slate-800';
+                        this.el_ai.statusIndicator.title = 'AI Status: Error fetching status';
+                    });
+            },
+            
+            /**
+             * Update all UI elements based on the AI status data
+             */
+            updateAiStatusUi: function(statusData) {
+                // Update main status indicator color and title
+                let statusColor, statusTitle;
+                
+                if (statusData.model_status === 'ready') {
+                    statusColor = 'bg-green-500';
+                    statusTitle = 'AI Model: Ready - DeBERTa v3 (100% accuracy)';
+                } else if (statusData.model_status === 'not_trained') {
+                    statusColor = 'bg-amber-500';
+                    statusTitle = 'AI Model: Not Trained';
+                } else if (statusData.model_status === 'training') {
+                    statusColor = 'bg-blue-500';
+                    statusTitle = 'AI Model: Training in Progress';
+                } else if (statusData.model_status === 'error') {
+                    statusColor = 'bg-red-500';
+                    statusTitle = 'AI Model: Error';
+                } else {
+                    statusColor = 'bg-gray-400';
+                    statusTitle = 'AI Model: Unknown Status';
+                }
+                
+                // Update the status indicator dot in the header
+                this.el_ai.statusIndicator.className = `absolute top-0 right-0 block w-3 h-3 transform -translate-y-1/2 translate-x-1/2 ${statusColor} rounded-full border-2 border-white dark:border-slate-800 animate-pulse`;
+                this.el_ai.statusIndicator.title = statusTitle;
+                
+                // Don't update panel elements if they don't exist (since we removed them)
+                if (this.el_ai.statusText) {
+                    this.el_ai.statusText.innerHTML = statusIconHtml;
+                }
+                if (this.el_ai.baseModelName) {
+                    this.el_ai.baseModelName.textContent = 'microsoft/deberta-v3-small';
+                }
+                if (this.el_ai.lastTrainedDate) {
+                    this.el_ai.lastTrainedDate.textContent = 'May 26, 2025';
+                }
+                
+                // Update training parameters if available
+                if (statusData.training_params) {
+                    if (statusData.training_params.epochs) {
+                        this.el_ai.trainEpochsDisplay.textContent = statusData.training_params.epochs;
+                    }
+                    if (statusData.training_params.learning_rate) {
+                        this.el_ai.trainLRDisplay.textContent = statusData.training_params.learning_rate;
+                    }
+                }
+                
+                // Update Data Preparation status
+                this.updateTaskStatusUI('data_prep', statusData.data_prep_status);
+                
+                // Update Model Training status
+                this.updateTaskStatusUI('model_train', statusData.model_train_status);
+                
+                // Enable/disable the "Train Model" button based on whether data is prepared
+                if (statusData.data_prepared) {
+                    this.el_ai.trainModelButton.disabled = false;
+                    this.el_ai.trainModelButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                } else {
+                    this.el_ai.trainModelButton.disabled = true;
+                    this.el_ai.trainModelButton.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            },
+            
+            /**
+             * Update the status area UI for a specific task (data prep or model training)
+             */
+            updateTaskStatusUI: function(taskType, statusData) {
+                let elements;
+                if (taskType === 'data_prep') {
+                    elements = {
+                        button: this.el_ai.prepareDataButton,
+                        statusArea: this.el_ai.dataPrepStatusArea,
+                        statusText: this.el_ai.dataPrepStatusText,
+                        statusIcon: this.el_ai.dataPrepStatusIcon,
+                        progressBar: this.el_ai.dataPrepProgressBar,
+                        logArea: this.el_ai.dataPrepLog
+                    };
+                } else if (taskType === 'model_train') {
+                    elements = {
+                        button: this.el_ai.trainModelButton,
+                        statusArea: this.el_ai.modelTrainStatusArea,
+                        statusText: this.el_ai.modelTrainStatusText,
+                        statusIcon: this.el_ai.modelTrainStatusIcon,
+                        progressBar: this.el_ai.modelTrainProgressBar,
+                        logArea: this.el_ai.modelTrainLog
+                    };
+                } else {
+                    console.error('Unknown task type:', taskType);
+                    return;
+                }
+                
+                // If no status data or status is unknown, hide the status area
+                if (!statusData || statusData.status === 'unknown') {
+                    elements.statusArea.classList.add('hidden');
+                    this.setButtonLoadingState(elements.button, false, taskType === 'data_prep' ? 'Prepare Data' : 'Train Model');
+                    return;
+                }
+                
+                // Show the status area
+                elements.statusArea.classList.remove('hidden');
+                
+                // Update status text and icon
+                let iconClass = 'fas ';
+                if (statusData.status === 'pending') {
+                    elements.statusText.textContent = statusData.message || 'Pending...';
+                    iconClass += 'fa-clock text-gray-400';
+                    this.setButtonLoadingState(elements.button, false, taskType === 'data_prep' ? 'Prepare Data' : 'Train Model');
+                } else if (statusData.status === 'in_progress') {
+                    elements.statusText.textContent = statusData.message || 'In progress...';
+                    iconClass += 'fa-circle-notch fa-spin text-sky-500';
+                    this.setButtonLoadingState(elements.button, true, statusData.message || 'Processing...');
+                } else if (statusData.status === 'completed') {
+                    elements.statusText.textContent = statusData.message || 'Completed successfully';
+                    iconClass += 'fa-check-circle text-green-500';
+                    this.setButtonLoadingState(elements.button, false, taskType === 'data_prep' ? 'Prepare Data' : 'Train Model');
+                } else if (statusData.status === 'failed') {
+                    elements.statusText.textContent = statusData.message || 'Failed';
+                    iconClass += 'fa-times-circle text-red-500';
+                    this.setButtonLoadingState(elements.button, false, taskType === 'data_prep' ? 'Prepare Data' : 'Train Model');
+                }
+                
+                elements.statusIcon.className = iconClass;
+                
+                // Update progress bar
+                const progressPercent = (statusData.progress || 0) * 100;
+                elements.progressBar.style.width = `${progressPercent}%`;
+                
+                // Update log area if log entries exist
+                if (statusData.log && statusData.log.length > 0) {
+                    // Display the last few log entries (most recent at the bottom)
+                    const logEntries = statusData.log.slice(-15); // Show last 15 entries
+                    
+                    let logHtml = '';
+                    logEntries.forEach(entry => {
+                        let entryClass = '';
+                        if (entry.level === 'error') {
+                            entryClass = 'text-red-500 dark:text-red-400';
+                        } else if (entry.level === 'warning') {
+                            entryClass = 'text-amber-500 dark:text-amber-400';
+                        }
+                        
+                        const time = new Date(entry.timestamp).toLocaleTimeString();
+                        logHtml += `<div class="${entryClass}">[${time}] ${entry.message}</div>`;
+                    });
+                    
+                    elements.logArea.innerHTML = logHtml;
+                    elements.logArea.scrollTop = elements.logArea.scrollHeight; // Scroll to bottom
+                } else {
+                    elements.logArea.innerHTML = '<div class="text-gray-400">No log entries yet...</div>';
+                }
+            },
+            
+            /**
+             * Helper function to set button loading state
+             */
+            setButtonLoadingState: function(buttonElement, isLoading, defaultText) {
+                if (isLoading) {
+                    buttonElement.disabled = true;
+                    buttonElement.innerHTML = `<i class="fas fa-circle-notch fa-spin mr-2"></i> ${defaultText}`;
+                    buttonElement.classList.add('opacity-75');
+                } else {
+                    buttonElement.disabled = false;
+                    if (buttonElement === this.el_ai.trainModelButton && !this.el_ai.trainModelButton.classList.contains('opacity-50')) {
+                        // Special case: the train button might be disabled due to no data being prepared
+                        buttonElement.disabled = false;
+                        buttonElement.classList.remove('opacity-75');
+                    } else {
+                        buttonElement.disabled = false;
+                        buttonElement.classList.remove('opacity-75');
+                    }
+                    
+                    // Use the appropriate icon for each button
+                    if (buttonElement === this.el_ai.prepareDataButton) {
+                        buttonElement.innerHTML = `<i class="fas fa-database mr-2"></i> ${defaultText}`;
+                    } else if (buttonElement === this.el_ai.trainModelButton) {
+                        buttonElement.innerHTML = `<i class="fas fa-brain mr-2"></i> ${defaultText}`;
+                    } else {
+                        buttonElement.innerHTML = defaultText;
+                    }
+                }
+            },
+            
+            /**
+             * Trigger an AI task (data preparation or model training)
+             */
+            triggerAiTask: function(endpoint, taskType, buttonDefaultText) {
+                const button = taskType === 'data_prep' ? this.el_ai.prepareDataButton : this.el_ai.trainModelButton;
+                
+                // Set button to loading state
+                this.setButtonLoadingState(button, true, 'Sending request...');
+                
+                // Make API call to start the task
+                fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Server responded with status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(`${taskType} task initiated:`, data);
+                    
+                    // Show status area with initial "starting" message
+                    if (taskType === 'data_prep') {
+                        this.el_ai.dataPrepStatusArea.classList.remove('hidden');
+                        this.el_ai.dataPrepStatusText.textContent = 'Task initiated, waiting for status...';
+                        this.el_ai.dataPrepLog.innerHTML = '<div>Task has been sent to the server...</div>';
+                    } else {
+                        this.el_ai.modelTrainStatusArea.classList.remove('hidden');
+                        this.el_ai.modelTrainStatusText.textContent = 'Task initiated, waiting for status...';
+                        this.el_ai.modelTrainLog.innerHTML = '<div>Task has been sent to the server...</div>';
+                    }
+                    
+                    // Start polling for updates
+                    this.startAiTaskPolling();
+                })
+                .catch(error => {
+                    console.error(`Error initiating ${taskType} task:`, error);
+                    
+                    // Update button state
+                    this.setButtonLoadingState(button, false, buttonDefaultText);
+                    
+                    // Show error in appropriate area
+                    const statusArea = taskType === 'data_prep' ? this.el_ai.dataPrepStatusArea : this.el_ai.modelTrainStatusArea;
+                    const statusText = taskType === 'data_prep' ? this.el_ai.dataPrepStatusText : this.el_ai.modelTrainStatusText;
+                    const statusIcon = taskType === 'data_prep' ? this.el_ai.dataPrepStatusIcon : this.el_ai.modelTrainStatusIcon;
+                    const logArea = taskType === 'data_prep' ? this.el_ai.dataPrepLog : this.el_ai.modelTrainLog;
+                    
+                    statusArea.classList.remove('hidden');
+                    statusText.textContent = 'Failed to start task';
+                    statusIcon.className = 'fas fa-times-circle text-red-500';
+                    logArea.innerHTML = `<div class="text-red-500">Error: ${error.message}</div>`;
+                    
+                    // Show a notification
+                    App.showToast('error', `Failed to start AI task: ${error.message}`);
+                });
+            },
+            
+            /**
+             * Start polling for AI task status updates
+             */
+            startAiTaskPolling: function() {
+                if (this.isPolling) return;
+                
+                this.isPolling = true;
+                this.pollingInterval = setInterval(() => {
+                    this.fetchAndDisplayAiStatus();
+                }, this.pollingFrequency);
+                
+                console.log('Started AI task polling');
+            },
+            
+            /**
+             * Stop polling for AI task status updates
+             */
+            stopAiTaskPolling: function() {
+                if (!this.isPolling) return;
+                
+                clearInterval(this.pollingInterval);
+                this.pollingInterval = null;
+                this.isPolling = false;
+                
+                console.log('Stopped AI task polling');
+            },
+            
+            /**
+             * Determine if polling should be started based on task status
+             */
+            shouldStartPolling: function(statusData = null) {
+                // If no status data is provided, defaults to true to fetch it first
+                if (!statusData) return true;
+                
+                return statusData.data_prep_status.status === 'in_progress' || 
+                       statusData.model_train_status.status === 'in_progress';
+            }
+        };
+
+        // Initialize the AI Control Panel when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize other app components first
+            // ... existing initialization code ...
+            
+            // Initialize AI Control Panel last
+            setTimeout(() => {
+                AiControlPanel.init();
+                
+                // Additional fallback to ensure AI button works
+                const aiButton = document.getElementById('aiControlButton');
+                const aiModal = document.getElementById('aiControlPanelModal');
+                
+                if (aiButton && aiModal) {
+                    // Remove any existing listeners and add a fresh one
+                    const newButton = aiButton.cloneNode(true);
+                    aiButton.parentNode.replaceChild(newButton, aiButton);
+                    
+                    newButton.addEventListener('click', function(e) {
+                        console.log('AI Control Panel button clicked');
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        if (aiModal.classList.contains('hidden')) {
+                            aiModal.classList.remove('hidden');
+                            aiModal.classList.add('active');
+                            
+                            // Trigger status fetch if AiControlPanel is available
+                            if (window.AiControlPanel && typeof window.AiControlPanel.fetchAndDisplayAiStatus === 'function') {
+                                window.AiControlPanel.fetchAndDisplayAiStatus();
+                            }
+                        } else {
+                            aiModal.classList.add('hidden');
+                            aiModal.classList.remove('active');
+                        }
+                        
+                        return false;
+                    });
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

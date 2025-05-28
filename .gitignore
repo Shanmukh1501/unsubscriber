@@ -1,0 +1,234 @@
+# Gmail Unsubscriber .gitignore
+
+# IMPORTANT: Authentication and Credentials (NEVER commit these!)
+client_secret.json
+client_secret*.json
+credentials.json
+token.json
+*.pem
+*.key
+.env
+.env.local
+.env.*.local
+
+# Claude Code memory files (personal/local)
+CLAUDE.local.md
+.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+*.cover
+*.log
+.git
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Flask
+instance/
+flask_cache/
+*.db
+*.sqlite
+*.sqlite3
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+.ENV/
+.env/
+venv.bak/
+
+# IDE and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+.vs/
+*.code-workspace
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Model training artifacts
+logs/
+tensorboard/
+wandb/
+mlruns/
+checkpoints/
+checkpoint-*/
+*.ckpt
+*.pth
+*.pt
+*.h5
+*.pkl
+*.joblib
+training_args.bin
+optimizer.pt
+scheduler.pt
+rng_state.pth
+
+# Temporary model directories
+production_model/
+fast_roberta_model/
+temp_model/
+model_outputs/
+results/
+
+# Large data files
+*.csv
+!optimized_training_data.csv  # Keep this specific training data file
+*.tsv
+*.jsonl
+*.parquet
+*.feather
+*.arrow
+
+# Jupyter Notebooks (if any)
+.ipynb_checkpoints/
+*.ipynb
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+test_results/
+*.test
+*.spec
+
+# Documentation build files
+docs/_build/
+docs/.doctrees/
+site/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+*.cache
+~*
+
+# Log files
+*.log
+logs/
+*.out
+*.err
+
+# Task status files
+ml_suite/task_status/
+task_status/
+
+# User data (privacy)
+ml_suite/user_data/
+user_data/
+user_feedback/
+feedback_data/
+
+# Session data
+flask_session/
+sessions/
+
+# Mac specific
+.AppleDouble
+.LSOverride
+Icon
+*.icloud
+
+# Windows specific
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux specific
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Archive files
+*.zip
+*.tar
+*.tar.gz
+*.tar.bz2
+*.rar
+*.7z
+
+# Misc
+.env.example
+.env.sample
+secrets/
+private/
+confidential/
+*.secret
+config.local.py
+settings.local.py
+
+# Keep these files (exceptions)
+!requirements.txt
+!.gitignore
+!README.md
+# Large model files
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.h5
+*.ckpt
+
+# Specific paths
+ml_suite/models/fine_tuned_unsubscriber/model.safetensors
+final_optimized_model/model.safetensors
