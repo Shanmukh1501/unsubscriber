@@ -92,7 +92,6 @@ This project is provided for educational and personal use. Please ensure complia
 
 ## 🙏 Acknowledgments
 
-- Built with Claude AI assistance
 - Uses Microsoft's DeBERTa v3 model
 - Powered by Google's Gmail API
 - UI framework: Tailwind CSS

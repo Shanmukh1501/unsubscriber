@@ -280,8 +280,7 @@ gmail-unsubscriber/
 │   └── Dockerfile                     # Container definition
 └── 📋 Project Files
     ├── README.md                      # This file
-    ├── LICENSE                        # MIT license
-    └── CLAUDE.md                      # Development context
+    └── LICENSE                        # MIT license
 ```
 
 ## 🚦 Usage Examples
@@ -472,7 +471,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 ### Built With Support From
-- 🤖 **Claude AI**: Advanced development assistance and code generation
 - 🧠 **Microsoft Research**: DeBERTa v3 transformer model
 - 🔍 **Google**: Gmail API and OAuth 2.0 infrastructure
 - 🎨 **Tailwind Labs**: CSS framework and design system
