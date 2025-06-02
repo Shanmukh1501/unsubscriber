@@ -9,8 +9,6 @@ import time
 import random
 import threading
 import logging
-import ssl
-import certifi
 import urllib3
 
 # Set HF_HOME to avoid deprecation warning
@@ -38,7 +36,6 @@ from bs4 import BeautifulSoup
 # Import ML suite components
 from ml_suite.task_utils import AiTaskLogger, get_task_status
 from ml_suite.config import DATA_PREP_STATUS_FILE, MODEL_TRAIN_STATUS_FILE, PERSONALIZED_TRAIN_STATUS_FILE, PRE_TRAINED_MODEL_NAME, NUM_TRAIN_EPOCHS, LEARNING_RATE
-# Removed unused imports - user_data_collector and model_personalizer were deleted
 from ml_suite.predictor import initialize_predictor, get_ai_prediction_for_email, is_predictor_ready, get_model_status
 
 # --- Configuration ---

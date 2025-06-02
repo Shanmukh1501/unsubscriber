@@ -1,0 +1,199 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+    </linearGradient>
+    <filter id="card-shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  
+  <!-- Title -->
+  <text x="600" y="60" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="#f1f5f9" text-anchor="middle">
+    Key Features
+  </text>
+  
+  <!-- Feature Cards -->
+  <!-- AI Classification -->
+  <g transform="translate(50, 120)">
+    <rect width="260" height="280" rx="20" fill="#1e293b" stroke="#3b82f6" stroke-width="2" filter="url(#card-shadow)"/>
+    
+    <!-- Icon -->
+    <circle cx="130" cy="70" r="30" fill="#3b82f6" opacity="0.2"/>
+    <text x="130" y="82" font-family="Arial, sans-serif" font-size="36" text-anchor="middle">🧠</text>
+    
+    <!-- Title -->
+    <text x="130" y="140" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#3b82f6" text-anchor="middle">
+      AI Classification
+    </text>
+    
+    <!-- Description -->
+    <text x="130" y="170" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">
+      DeBERTa v3 Model
+    </text>
+    <text x="130" y="190" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">
+      141M Parameters
+    </text>
+    <text x="130" y="210" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">
+      20,000 Training Samples
+    </text>
+    
+    <!-- Highlight -->
+    <rect x="40" y="240" width="180" height="30" rx="15" fill="#3b82f6" opacity="0.2"/>
+    <text x="130" y="259" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#3b82f6" text-anchor="middle">
+      100% Accuracy
+    </text>
+  </g>
+  
+  <!-- Privacy First -->
+  <g transform="translate(330, 120)">
+    <rect width="260" height="280" rx="20" fill="#1e293b" stroke="#10b981" stroke-width="2" filter="url(#card-shadow)"/>
+    
+    <!-- Icon -->
+    <circle cx="130" cy="70" r="30" fill="#10b981" opacity="0.2"/>
+    <text x="130" y="82" font-family="Arial, sans-serif" font-size="36" text-anchor="middle">🔒</text>
+    
+    <!-- Title -->
+    <text x="130" y="140" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#10b981" text-anchor="middle">
+      Privacy First
+    </text>
+    
+    <!-- Description -->
+    <text x="130" y="170" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">
+      Local Processing Only
+    </text>
+    <text x="130" y="190" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">
+      No Data Collection
+    </text>
+    <text x="130" y="210" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">
+      Secure OAuth 2.0
+    </text>
+    
+    <!-- Highlight -->
+    <rect x="40" y="240" width="180" height="30" rx="15" fill="#10b981" opacity="0.2"/>
+    <text x="130" y="259" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#10b981" text-anchor="middle">
+      100% Private
+    </text>
+  </g>
+  
+  <!-- Fast Processing -->
+  <g transform="translate(610, 120)">
+    <rect width="260" height="280" rx="20" fill="#1e293b" stroke="#f59e0b" stroke-width="2" filter="url(#card-shadow)"/>
+    
+    <!-- Icon -->
+    <circle cx="130" cy="70" r="30" fill="#f59e0b" opacity="0.2"/>
+    <text x="130" y="82" font-family="Arial, sans-serif" font-size="36" text-anchor="middle">⚡</text>
+    
+    <!-- Title -->
+    <text x="130" y="140" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#f59e0b" text-anchor="middle">
+      Lightning Fast
+    </text>
+    
+    <!-- Description -->
+    <text x="130" y="170" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">
+      15ms Per Email
+    </text>
+    <text x="130" y="190" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">
+      Batch Processing
+    </text>
+    <text x="130" y="210" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">
+      Real-time Results
+    </text>
+    
+    <!-- Highlight -->
+    <rect x="40" y="240" width="180" height="30" rx="15" fill="#f59e0b" opacity="0.2"/>
+    <text x="130" y="259" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#f59e0b" text-anchor="middle">
+      2000+ Emails/Min
+    </text>
+  </g>
+  
+  <!-- Smart Unsubscribe -->
+  <g transform="translate(890, 120)">
+    <rect width="260" height="280" rx="20" fill="#1e293b" stroke="#ef4444" stroke-width="2" filter="url(#card-shadow)"/>
+    
+    <!-- Icon -->
+    <circle cx="130" cy="70" r="30" fill="#ef4444" opacity="0.2"/>
+    <text x="130" y="82" font-family="Arial, sans-serif" font-size="36" text-anchor="middle">✉️</text>
+    
+    <!-- Title -->
+    <text x="130" y="140" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#ef4444" text-anchor="middle">
+      Smart Unsubscribe
+    </text>
+    
+    <!-- Description -->
+    <text x="130" y="170" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">
+      RFC 8058 Support
+    </text>
+    <text x="130" y="190" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">
+      Multiple Methods
+    </text>
+    <text x="130" y="210" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">
+      One-Click Action
+    </text>
+    
+    <!-- Highlight -->
+    <rect x="40" y="240" width="180" height="30" rx="15" fill="#ef4444" opacity="0.2"/>
+    <text x="130" y="259" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#ef4444" text-anchor="middle">
+      95% Success Rate
+    </text>
+  </g>
+  
+  <!-- Bottom Section - Tech Stack -->
+  <g transform="translate(150, 450)">
+    <rect width="900" height="280" rx="20" fill="#1e293b" stroke="#334155" stroke-width="2" filter="url(#card-shadow)"/>
+    
+    <text x="450" y="40" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#f1f5f9" text-anchor="middle">
+      Built With Modern Tech Stack
+    </text>
+    
+    <!-- Tech Categories -->
+    <!-- Frontend -->
+    <g transform="translate(50, 80)">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#3b82f6">Frontend</text>
+      <text x="0" y="25" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• JavaScript ES6+</text>
+      <text x="0" y="45" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• HTML5 / CSS3</text>
+      <text x="0" y="65" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• Tailwind CSS</text>
+      <text x="0" y="85" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• Single Page App</text>
+    </g>
+    
+    <!-- Backend -->
+    <g transform="translate(250, 80)">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#10b981">Backend</text>
+      <text x="0" y="25" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• Python 3.8+</text>
+      <text x="0" y="45" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• Flask REST API</text>
+      <text x="0" y="65" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• Gmail API</text>
+      <text x="0" y="85" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• OAuth 2.0</text>
+    </g>
+    
+    <!-- AI/ML -->
+    <g transform="translate(450, 80)">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#f59e0b">AI/ML</text>
+      <text x="0" y="25" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• PyTorch</text>
+      <text x="0" y="45" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• Transformers</text>
+      <text x="0" y="65" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• DeBERTa v3</text>
+      <text x="0" y="85" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• HuggingFace</text>
+    </g>
+    
+    <!-- Infrastructure -->
+    <g transform="translate(650, 80)">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#ef4444">Infrastructure</text>
+      <text x="0" y="25" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• Docker Ready</text>
+      <text x="0" y="45" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• Git Version Control</text>
+      <text x="0" y="65" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• CI/CD Compatible</text>
+      <text x="0" y="85" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0">• Open Source</text>
+    </g>
+    
+    <!-- Stats at bottom -->
+    <rect x="50" y="200" width="800" height="2" fill="#334155"/>
+    
+    <text x="100" y="235" font-family="Arial, sans-serif" font-size="16" fill="#94a3b8">48,000+ Lines of Code</text>
+    <text x="350" y="235" font-family="Arial, sans-serif" font-size="16" fill="#94a3b8">•</text>
+    <text x="400" y="235" font-family="Arial, sans-serif" font-size="16" fill="#94a3b8">4 Documentation Guides</text>
+    <text x="650" y="235" font-family="Arial, sans-serif" font-size="16" fill="#94a3b8">•</text>
+    <text x="700" y="235" font-family="Arial, sans-serif" font-size="16" fill="#94a3b8">MIT License</text>
+  </g>
+</svg>

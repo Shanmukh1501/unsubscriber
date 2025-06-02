@@ -1,0 +1,111 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#0f172a"/>
+  
+  <!-- Title -->
+  <text x="600" y="50" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#f1f5f9" text-anchor="middle">
+    Gmail Unsubscriber Architecture
+  </text>
+  
+  <!-- Define arrow marker -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+    </marker>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- User Layer -->
+  <g transform="translate(100, 100)">
+    <rect width="200" height="80" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+    <text x="100" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#3b82f6" text-anchor="middle">User</text>
+    <text x="100" y="60" font-family="Arial, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Gmail Account</text>
+  </g>
+  
+  <!-- Frontend Layer -->
+  <g transform="translate(500, 100)">
+    <rect width="280" height="120" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+    <text x="140" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#10b981" text-anchor="middle">Frontend (SPA)</text>
+    <text x="140" y="55" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• HTML5 / CSS3 / JavaScript</text>
+    <text x="140" y="75" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• Tailwind CSS</text>
+    <text x="140" y="95" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• Dark/Light Theme</text>
+  </g>
+  
+  <!-- OAuth Box -->
+  <g transform="translate(900, 100)">
+    <rect width="200" height="80" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+    <text x="100" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#f59e0b" text-anchor="middle">Google OAuth</text>
+    <text x="100" y="60" font-family="Arial, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Secure Auth</text>
+  </g>
+  
+  <!-- Backend Layer -->
+  <g transform="translate(450, 300)">
+    <rect width="380" height="140" rx="10" fill="#1e293b" stroke="#8b5cf6" stroke-width="2"/>
+    <text x="190" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#8b5cf6" text-anchor="middle">Backend (Flask API)</text>
+    <text x="190" y="55" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• RESTful API Endpoints</text>
+    <text x="190" y="75" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• Gmail API Integration</text>
+    <text x="190" y="95" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• Session Management</text>
+    <text x="190" y="115" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• Rate Limiting &amp; Caching</text>
+  </g>
+  
+  <!-- AI Engine -->
+  <g transform="translate(100, 500)">
+    <rect width="300" height="140" rx="10" fill="#1e293b" stroke="#ef4444" stroke-width="2"/>
+    <text x="150" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#ef4444" text-anchor="middle">AI Engine</text>
+    <text x="150" y="55" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• DeBERTa v3 (141M params)</text>
+    <text x="150" y="75" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• PyTorch + Transformers</text>
+    <text x="150" y="95" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• 100% Accuracy</text>
+    <text x="150" y="115" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• 15ms Inference</text>
+  </g>
+  
+  <!-- Email Processing -->
+  <g transform="translate(500, 500)">
+    <rect width="280" height="140" rx="10" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
+    <text x="140" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#06b6d4" text-anchor="middle">Email Processing</text>
+    <text x="140" y="55" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• Batch Operations</text>
+    <text x="140" y="75" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• Unsubscribe Logic</text>
+    <text x="140" y="95" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• RFC 8058 Support</text>
+    <text x="140" y="115" font-family="Arial, sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">• Keep List Management</text>
+  </g>
+  
+  <!-- Gmail API -->
+  <g transform="translate(900, 500)">
+    <rect width="200" height="100" rx="10" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+    <text x="100" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#22c55e" text-anchor="middle">Gmail API</text>
+    <text x="100" y="60" font-family="Arial, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Message Access</text>
+    <text x="100" y="80" font-family="Arial, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Send Capabilities</text>
+  </g>
+  
+  <!-- Arrows -->
+  <!-- User to Frontend -->
+  <line x1="300" y1="140" x2="500" y2="140" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Frontend to Backend -->
+  <line x1="640" y1="220" x2="640" y2="300" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- OAuth to Backend -->
+  <line x1="900" y1="140" x2="830" y2="340" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Backend to AI Engine -->
+  <line x1="450" y1="400" x2="400" y2="520" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Backend to Email Processing -->
+  <line x1="640" y1="440" x2="640" y2="500" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Backend to Gmail API -->
+  <line x1="830" y1="400" x2="900" y2="520" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Privacy Badge -->
+  <g transform="translate(400, 700)">
+    <rect width="400" height="60" rx="30" fill="#064e3b" stroke="#10b981" stroke-width="2" filter="url(#glow)"/>
+    <text x="200" y="38" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#10b981" text-anchor="middle">
+      🔒 All Processing Happens Locally
+    </text>
+  </g>
+</svg>
